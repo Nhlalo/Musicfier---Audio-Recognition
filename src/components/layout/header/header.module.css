@@ -1,0 +1,40 @@
+:root {
+  --main-bg: #00bbff;
+  --main-clr: #ffffff;
+}
+
+.header {
+  width: 100%;
+  color: var(--main-clr);
+  background-color: var(--main-bg);
+  display: flex;
+  justify-content: center;
+  padding-top: 12px;
+}
+.navContentWrapper {
+  width: 95%;
+  max-width: 1340px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.logoContainer {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+.logo {
+  width: clamp(15px, 10%, 45px);
+  height: auto;
+}
+.websiteName {
+  font-size: 1.2rem;
+  font-weight: bold;
+}
+.navContainer {
+  display: none;
+}
+.dropdownMenu {
+  color: var(--main-clr);
+  min-width: 24px;
+}
