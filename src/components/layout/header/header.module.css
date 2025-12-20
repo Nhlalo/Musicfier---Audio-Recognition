@@ -34,7 +34,31 @@
 .navContainer {
   display: none;
 }
+.listContainer {
+  display: flex;
+  gap: 40px;
+}
+.navListItem,
+.logoContainer {
+  cursor: pointer;
+}
+.navListItem:hover {
+  text-decoration: underline;
+}
+.navlink {
+  color: white;
+  font-weight: bold;
+}
+
 .dropdownMenu {
   color: var(--main-clr);
   min-width: 24px;
+}
+@media (min-width: 1024px) {
+  .dropdownMenu {
+    display: none;
+  }
+  .navContainer {
+    display: block;
+  }
 }
