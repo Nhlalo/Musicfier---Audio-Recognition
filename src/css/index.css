@@ -26,4 +26,5 @@ h2 {
 /*This ensures that the Link element does not come with default margin because it is rendered as a 'a' element by the browser*/
 a {
   margin: 0;
+  text-decoration: none;
 }
