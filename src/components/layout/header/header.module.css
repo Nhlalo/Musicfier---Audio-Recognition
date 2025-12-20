@@ -12,17 +12,28 @@
 .navContentWrapper {
   width: 95%;
   max-width: 1340px;
-  display: flex;
+
   justify-content: space-between;
+}
+.navContentWrapper,
+.logoWrapper {
+  display: flex;
   align-items: center;
 }
+
 .logoContainer {
   display: flex;
   align-items: center;
+  gap: 8px;
   cursor: pointer;
 }
-.logo {
+.logoWrapper {
+  justify-content: center;
   width: clamp(15px, 10%, 45px);
+  border-radius: 50%;
+}
+.logo {
+  width: 95%;
   height: auto;
 }
 .websiteName {
