@@ -10,18 +10,26 @@ export default function Header() {
           <figcaption className={Styles.websiteName}>MUSICFIER</figcaption>
         </a>
         <nav className={Styles.navContainer}>
-          <ul>
+          <ul className={Styles.listContainer}>
             <li className={Styles.navListItem}>
-              <a href="">Concerts</a>
+              <a href="" className={Styles.navlink}>
+                Concerts
+              </a>
             </li>
             <li className={Styles.navListItem}>
-              <a href="">Charts</a>
+              <a href="" className={Styles.navlink}>
+                Charts
+              </a>
             </li>
             <li className={Styles.navListItem}>
-              <a href="">My Music</a>
+              <a href="" className={Styles.navlink}>
+                My Music
+              </a>
             </li>
             <li className={Styles.navListItem}>
-              <a href="">Contacts</a>
+              <a href="" className={Styles.navlink}>
+                Contacts
+              </a>
             </li>
           </ul>
         </nav>
