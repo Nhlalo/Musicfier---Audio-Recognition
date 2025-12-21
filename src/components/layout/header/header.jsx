@@ -76,12 +76,11 @@ export default function Header({
         <nav className={Styles.navContainer}>
           <ul className={Styles.listContainer}>
             {navLinksContent.map((element) => (
-              <li className={Styles.navListItem}>
+              <li className={Styles.navListItem} key={element.key}>
                 <a
                   href=""
                   className={Styles.navlink}
                   style={navLinksConditionalStyles}
-                  key={element.key}
                 >
                   {element.content}
                 </a>
