@@ -4,6 +4,7 @@ import { Menu } from "lucide-react";
 import Styles from "./header.module.css";
 import Sidebar from "./sidebar/sidebar";
 
+//Establish keys for the list items
 const listItemKeys = {
   concerts: crypto.randomUUID(),
   charts: crypto.randomUUID(),
@@ -23,6 +24,9 @@ export default function Header({
 }) {
   const [scrollPosition, setScrollPosition] = useState(0);
   const [showSidebar, setShowSidebar] = useState(false);
+  const [sidebar, setSidebar] = useState(null);
+
+  //Array containing the content within the links and keys assigned to the list items
   const navLinksContent = [
     { content: "Concerts", key: listItemKeys.concerts },
     { content: "Charts", key: listItemKeys.charts },
@@ -59,10 +63,21 @@ export default function Header({
   const dropdownMenuConditionalStyles = {
     color: scrollPosition == 0 ? btnBG1 : btnBG2,
   };
-  function handleOpeningSidebar() {
-    setShowSidebar(true);
+
+  //This will collect the sidebar data(info of side bar with useRef) from the sidebar(child component)
+  function collectSidebarData(data) {
+    setSidebar(data);
   }
 
+  //This will display the side bar
+  function handleOpeningSidebar() {
+    setShowSidebar(true);
+    if (sidebar) {
+      sidebar.current.showModal();
+    }
+  }
+
+  //This will be passed down to the sidebar(child component)
   function handleSidebarDisplay(value) {
     setShowSidebar(value);
   }
@@ -115,6 +130,7 @@ export default function Header({
       <Sidebar
         UpdateSidebarVisibility={handleSidebarDisplay}
         sideBarStatus={showSidebar}
+        sidebarData={collectSidebarData}
       />
     </>
   );
