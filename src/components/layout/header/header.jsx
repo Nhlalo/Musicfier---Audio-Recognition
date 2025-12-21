@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import Logo from "../../../assets/searchimage.png";
 import { Menu } from "lucide-react";
 import Styles from "./header.module.css";
-export default function Header(bg1, bg2, color1, color2, logoBG1, logoBG2) {
+export default function Header({ bg1, bg2, color1, color2, logoBG1, logoBG2 }) {
   const [scrollPosition, setScrollPosition] = useState(0);
   const navLinksContent = ["Concerts", "Charts", "My Music", "Contacts"];
 
