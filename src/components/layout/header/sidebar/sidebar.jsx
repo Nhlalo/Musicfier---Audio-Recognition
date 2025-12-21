@@ -1,6 +1,7 @@
 import Styles from "./sidebar.module.css";
 import Logo from "../../../../assets/searchimage.png";
 import { X } from "lucide-react";
+import { useRef, useEffect } from "react";
 
 const listItemKeys = {
   concerts: crypto.randomUUID(),
@@ -17,7 +18,7 @@ export default function Sidebar({ UpdateSidebarVisibility, sideBarStatus }) {
     { content: "Contacts", key: listItemKeys.contacts },
   ];
   return (
-    <div
+    <dialog
       className={
         sideBarStatus
           ? `${Styles.sideBar} ${Styles.openSidebar}`
@@ -53,6 +54,6 @@ export default function Sidebar({ UpdateSidebarVisibility, sideBarStatus }) {
           </ul>
         </nav>
       </div>
-    </div>
+    </dialog>
   );
 }
