@@ -62,11 +62,10 @@ export default function Header(bg1, bg2, color1, color2, logoBG1, logoBG2) {
             ))}
           </ul>
         </nav>
-        <Menu
-          className={Styles.dropdownMenu}
-          aria-label="Open side bar"
-          role="button"
-        />
+
+        <button aria-label="Open drop down menu">
+          <Menu className={Styles.dropdownMenu} aria-hidden="true" />
+        </button>
       </div>
     </header>
   );
