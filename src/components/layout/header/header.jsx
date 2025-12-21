@@ -36,10 +36,16 @@ export default function Header(bg1, bg2, color1, color2, logoBG1, logoBG2) {
     <header className={Styles.header} style={headerConditionalstyles}>
       <div className={Styles.navContentWrapper}>
         <a className={Styles.logoContainer}>
-          <div className={Styles.logoWrapper} style={logoBGConditionalStyles}>
+          <div
+            className={Styles.logoWrapper}
+            style={logoBGConditionalStyles}
+            aria-hidden="true"
+          >
             <img src={Logo} alt="Musicfier" className={Styles.logo} />
           </div>
-          <figcaption className={Styles.websiteName}>MUSICFIER</figcaption>
+          <figcaption className={Styles.websiteName} aria-hidden="true">
+            MUSICFIER
+          </figcaption>
         </a>
         <nav className={Styles.navContainer}>
           <ul className={Styles.listContainer}>
@@ -56,7 +62,11 @@ export default function Header(bg1, bg2, color1, color2, logoBG1, logoBG2) {
             ))}
           </ul>
         </nav>
-        <Menu className={Styles.dropdownMenu} aria-label="Drop down menu" />
+        <Menu
+          className={Styles.dropdownMenu}
+          aria-label="Open side bar"
+          role="button"
+        />
       </div>
     </header>
   );
