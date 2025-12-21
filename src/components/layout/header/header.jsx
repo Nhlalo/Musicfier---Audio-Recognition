@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import Logo from "../../../assets/searchimage.png";
 import { Menu } from "lucide-react";
 import Styles from "./header.module.css";
+import Sidebar from "./sidebar/sidebar";
 
 const listItemKeys = {
   concerts: crypto.randomUUID(),
@@ -21,6 +22,7 @@ export default function Header({
   btnBG2,
 }) {
   const [scrollPosition, setScrollPosition] = useState(0);
+  const [showSidebar, setShowSidebar] = useState(false);
   const navLinksContent = [
     { content: "Concerts", key: listItemKeys.concerts },
     { content: "Charts", key: listItemKeys.charts },
@@ -57,47 +59,64 @@ export default function Header({
   const dropdownMenuConditionalStyles = {
     color: scrollPosition > 0 ? btnBG1 : btnBG2,
   };
+  function handleOpeningSidebar() {
+    setShowSidebar(true);
+  }
+
+  function handleSidebarDisplay(value) {
+    setShowSidebar(value);
+  }
 
   return (
-    <header className={Styles.header} style={headerConditionalstyles}>
-      <div className={Styles.navContentWrapper}>
-        <a className={Styles.logoContainer}>
-          <div
-            className={Styles.logoWrapper}
-            style={logoBGConditionalStyles}
-            aria-hidden="true"
-          >
-            <img src={Logo} alt="Musicfier" className={Styles.logo} />
-          </div>
-          <figcaption className={Styles.websiteName} aria-hidden="true">
-            MUSICFIER
-          </figcaption>
-        </a>
-        <nav className={Styles.navContainer}>
-          <ul className={Styles.listContainer}>
-            {navLinksContent.map((element) => (
-              <li className={Styles.navListItem} key={element.key}>
-                <a
-                  href=""
-                  className={Styles.navlink}
-                  style={navLinksConditionalStyles}
-                >
-                  {element.content}
-                </a>
-              </li>
-            ))}
-          </ul>
-        </nav>
+    <>
+      <header className={Styles.header} style={headerConditionalstyles}>
+        <div className={Styles.navContentWrapper}>
+          <a className={Styles.logoContainer}>
+            <div
+              className={Styles.logoWrapper}
+              style={logoBGConditionalStyles}
+              aria-hidden="true"
+            >
+              <img src={Logo} alt="Musicfier" className={Styles.logo} />
+            </div>
+            <figcaption className={Styles.websiteName} aria-hidden="true">
+              MUSICFIER
+            </figcaption>
+          </a>
+          <nav className={Styles.navContainer}>
+            <ul className={Styles.listContainer}>
+              {navLinksContent.map((element) => (
+                <li className={Styles.navListItem} key={element.key}>
+                  <a
+                    href=""
+                    className={Styles.navlink}
+                    style={navLinksConditionalStyles}
+                  >
+                    {element.content}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </nav>
 
-        <button aria-label="Open drop down menu" className={Styles.dropdownBTN}>
-          <Menu
-            className={Styles.dropdownMenu}
-            aria-hidden="true"
-            style={dropdownMenuConditionalStyles}
-          />
-        </button>
-      </div>
-    </header>
+          <button
+            aria-label="Open drop down menu"
+            className={Styles.dropdownBTN}
+            onClick={handleOpeningSidebar}
+          >
+            <Menu
+              className={Styles.dropdownMenu}
+              aria-hidden="true"
+              style={dropdownMenuConditionalStyles}
+            />
+          </button>
+        </div>
+      </header>
+      <Sidebar
+        UpdateSidebarVisibility={handleSidebarDisplay}
+        sideBarStatus={showSidebar}
+      />
+    </>
   );
 }
 
