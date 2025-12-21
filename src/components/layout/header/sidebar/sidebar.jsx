@@ -3,6 +3,7 @@ import Logo from "../../../../assets/searchimage.png";
 import { X } from "lucide-react";
 import { useRef, useEffect } from "react";
 
+//Establish the keys for the list
 const listItemKeys = {
   concerts: crypto.randomUUID(),
   charts: crypto.randomUUID(),
@@ -10,13 +11,31 @@ const listItemKeys = {
   contacts: crypto.randomUUID(),
 };
 
-export default function Sidebar({ UpdateSidebarVisibility, sideBarStatus }) {
+export default function Sidebar({
+  UpdateSidebarVisibility,
+  sideBarStatus,
+  sidebarData,
+}) {
+  //Array containing the content within the links and keys assigned to the list items
   const navLinksContent = [
     { content: "Concerts", key: listItemKeys.concerts },
     { content: "Charts", key: listItemKeys.charts },
     { content: "My Music", key: listItemKeys.mymusic },
     { content: "Contacts", key: listItemKeys.contacts },
   ];
+  const sidebarRef = useRef(null);
+
+  //Close the side bar
+  function closeSideBar() {
+    UpdateSidebarVisibility(false);
+    sidebarRef.current.close();
+  }
+
+  useEffect(() => {
+    //Send the sidebar object obtained using useRef to the header
+    sidebarData(sidebarRef);
+  }, [sidebarData]);
+
   return (
     <dialog
       className={
@@ -24,6 +43,7 @@ export default function Sidebar({ UpdateSidebarVisibility, sideBarStatus }) {
           ? `${Styles.sideBar} ${Styles.openSidebar}`
           : Styles.sideBar
       }
+      ref={sidebarRef}
     >
       <div className={Styles.contentWrapper}>
         <div className={Styles.headerContainer}>
@@ -35,10 +55,7 @@ export default function Sidebar({ UpdateSidebarVisibility, sideBarStatus }) {
               MUSICFIER
             </figcaption>
           </a>
-          <button
-            aria-label="Close the side bar"
-            onClick={() => UpdateSidebarVisibility(false)}
-          >
+          <button aria-label="Close the side bar" onClick={closeSideBar}>
             <X className={Styles.closeIcon} aria-hidden="true" />
           </button>
         </div>
