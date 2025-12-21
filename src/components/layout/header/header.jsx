@@ -80,7 +80,7 @@ export default function Header({
           <Menu
             className={Styles.dropdownMenu}
             aria-hidden="true"
-            style={dropdownMenuConditionalStylesConditionalStyles}
+            style={dropdownMenuConditionalStyles}
           />
         </button>
       </div>
