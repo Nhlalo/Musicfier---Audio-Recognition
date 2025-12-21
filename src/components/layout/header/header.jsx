@@ -42,7 +42,7 @@ export default function Header({
 
     // Proper cleanup
     return () => window.removeEventListener("scroll", handleScroll);
-  }, [scrollPosition]); //
+  }, []); //
 
   const headerConditionalstyles = {
     backgroundColor: scrollPosition > 0 ? bg1 : bg2,
