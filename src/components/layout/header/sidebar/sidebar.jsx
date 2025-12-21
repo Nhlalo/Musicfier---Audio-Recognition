@@ -32,6 +32,10 @@ export default function Sidebar({
   }
 
   useEffect(() => {
+    //activate the close methode if the sidebar ref exists and sidebar status is false meaning close
+    if (!sideBarStatus && sidebarRef) {
+      sidebarRef.current.close();
+    }
     //Send the sidebar object obtained using useRef to the header
     sidebarData(sidebarRef);
   }, [sidebarData]);
