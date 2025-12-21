@@ -90,11 +90,11 @@ export default function Header({
 
 Header.defaultProps = {
   bg1: "#00bbff",
-  bg2: "#fff;",
-  color1: ": #fff;",
-  color2: "#000000;",
+  bg2: "#fff",
+  color1: ": #fff",
+  color2: "#000000",
   logoBG1: "#3b86f7",
-  logoBG2: "#242424;",
+  logoBG2: "#242424",
   btnBG1: "#fff",
   btnBG2: "#0077ff",
 };
