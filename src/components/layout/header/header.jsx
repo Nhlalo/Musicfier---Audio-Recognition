@@ -41,8 +41,8 @@ export default function Header({
     backgroundColor: scrollPosition > 0 ? logoBG1 : logoBG2,
   };
 
-  const btnConditionalStyles = {
-    backgroundColor: scrollPosition > 0 ? btnBG1 : btnBG2,
+  const dropdownMenuConditionalStyles = {
+    color: scrollPosition > 0 ? btnBG1 : btnBG2,
   };
 
   return (
@@ -76,12 +76,12 @@ export default function Header({
           </ul>
         </nav>
 
-        <button
-          aria-label="Open drop down menu"
-          className={Styles.dropdownBTN}
-          style={btnConditionalStyles}
-        >
-          <Menu className={Styles.dropdownMenu} aria-hidden="true" />
+        <button aria-label="Open drop down menu" className={Styles.dropdownBTN}>
+          <Menu
+            className={Styles.dropdownMenu}
+            aria-hidden="true"
+            style={dropdownMenuConditionalStylesConditionalStyles}
+          />
         </button>
       </div>
     </header>

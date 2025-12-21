@@ -59,7 +59,7 @@
 }
 
 .dropdownMenu {
-  color: var(--main-clr);
+  color: red;
   min-width: 24px;
 }
 @media (min-width: 1024px) {
