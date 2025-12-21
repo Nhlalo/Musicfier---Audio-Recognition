@@ -2,7 +2,16 @@ import React, { useState, useEffect } from "react";
 import Logo from "../../../assets/searchimage.png";
 import { Menu } from "lucide-react";
 import Styles from "./header.module.css";
-export default function Header({ bg1, bg2, color1, color2, logoBG1, logoBG2 }) {
+export default function Header({
+  bg1,
+  bg2,
+  color1,
+  color2,
+  logoBG1,
+  logoBG2,
+  btnBG1,
+  btnBG2,
+}) {
   const [scrollPosition, setScrollPosition] = useState(0);
   const navLinksContent = ["Concerts", "Charts", "My Music", "Contacts"];
 
@@ -30,6 +39,10 @@ export default function Header({ bg1, bg2, color1, color2, logoBG1, logoBG2 }) {
   };
   const logoBGConditionalStyles = {
     backgroundColor: scrollPosition > 0 ? logoBG1 : logoBG2,
+  };
+
+  const btnConditionalStyles = {
+    backgroundColor: scrollPosition > 0 ? btnBG1 : btnBG2,
   };
 
   return (
@@ -63,7 +76,11 @@ export default function Header({ bg1, bg2, color1, color2, logoBG1, logoBG2 }) {
           </ul>
         </nav>
 
-        <button aria-label="Open drop down menu">
+        <button
+          aria-label="Open drop down menu"
+          className={Styles.dropdownBTN}
+          style={btnConditionalStyles}
+        >
           <Menu className={Styles.dropdownMenu} aria-hidden="true" />
         </button>
       </div>
