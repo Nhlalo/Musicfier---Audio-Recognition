@@ -2,6 +2,14 @@ import React, { useState, useEffect } from "react";
 import Logo from "../../../assets/searchimage.png";
 import { Menu } from "lucide-react";
 import Styles from "./header.module.css";
+
+const listItemKeys = {
+  concerts: crypto.randomUUID(),
+  charts: crypto.randomUUID(),
+  mymusic: crypto.randomUUID(),
+  contacts: crypto.randomUUID(),
+};
+
 export default function Header({
   bg1,
   bg2,
@@ -13,7 +21,12 @@ export default function Header({
   btnBG2,
 }) {
   const [scrollPosition, setScrollPosition] = useState(0);
-  const navLinksContent = ["Concerts", "Charts", "My Music", "Contacts"];
+  const navLinksContent = [
+    { content: "Concerts", key: listItemKeys.concerts },
+    { content: "Charts", key: listItemKeys.charts },
+    { content: "My Music", key: listItemKeys.mymusic },
+    { content: "Contacts", key: listItemKeys.contacts },
+  ];
 
   useEffect(() => {
     // This is acceptable because we properly clean up
@@ -68,8 +81,9 @@ export default function Header({
                   href=""
                   className={Styles.navlink}
                   style={navLinksConditionalStyles}
+                  key={element.key}
                 >
-                  {element}
+                  {element.content}
                 </a>
               </li>
             ))}
