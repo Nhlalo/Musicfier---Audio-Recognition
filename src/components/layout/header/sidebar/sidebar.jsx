@@ -9,7 +9,7 @@ const listItemKeys = {
   contacts: crypto.randomUUID(),
 };
 
-export default function Sidebar() {
+export default function Sidebar({ UpdateSidebarVisibility, sideBarStatus }) {
   const navLinksContent = [
     { content: "Concerts", key: listItemKeys.concerts },
     { content: "Charts", key: listItemKeys.charts },
@@ -17,7 +17,13 @@ export default function Sidebar() {
     { content: "Contacts", key: listItemKeys.contacts },
   ];
   return (
-    <div className={Styles.sideBar}>
+    <div
+      className={
+        sideBarStatus
+          ? `${Styles.sideBar} ${Styles.openSidebar}`
+          : Styles.sideBar
+      }
+    >
       <div className={Styles.contentWrapper}>
         <div className={Styles.headerContainer}>
           <a className={Styles.logoContainer}>
@@ -28,7 +34,10 @@ export default function Sidebar() {
               MUSICFIER
             </figcaption>
           </a>
-          <button aria-label="Close the side bar">
+          <button
+            aria-label="Close the side bar"
+            onClick={() => UpdateSidebarVisibility(false)}
+          >
             <X className={Styles.closeIcon} aria-hidden="true" />
           </button>
         </div>
