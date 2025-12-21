@@ -45,19 +45,19 @@ export default function Header({
   }, []); //
 
   const headerConditionalstyles = {
-    backgroundColor: scrollPosition > 0 ? bg1 : bg2,
-    color: scrollPosition ? color1 : color2,
+    backgroundColor: scrollPosition == 0 ? bg1 : bg2,
+    color: scrollPosition == 0 ? color1 : color2,
   };
 
   const navLinksConditionalStyles = {
-    color: scrollPosition ? color1 : color2,
+    color: scrollPosition == 0 ? color1 : color2,
   };
   const logoBGConditionalStyles = {
-    backgroundColor: scrollPosition > 0 ? logoBG1 : logoBG2,
+    backgroundColor: scrollPosition == 0 ? logoBG1 : logoBG2,
   };
 
   const dropdownMenuConditionalStyles = {
-    color: scrollPosition > 0 ? btnBG1 : btnBG2,
+    color: scrollPosition == 0 ? btnBG1 : btnBG2,
   };
   function handleOpeningSidebar() {
     setShowSidebar(true);
