@@ -18,6 +18,7 @@ li {
 button {
   border: none;
   background: none;
+  cursor: pointer;
 }
 p {
   margin: 0;
@@ -27,4 +28,5 @@ a {
   margin: 0;
   text-decoration: none;
   color: inherit;
+  cursor: pointer;
 }
