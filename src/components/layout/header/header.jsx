@@ -24,7 +24,6 @@ export default function Header({
 }) {
   const [scrollPosition, setScrollPosition] = useState(0);
   const [showSidebar, setShowSidebar] = useState(false);
-  const [sidebar, setSidebar] = useState(null);
 
   //Array containing the content within the links and keys assigned to the list items
   const navLinksContent = [
@@ -63,11 +62,6 @@ export default function Header({
   const dropdownMenuConditionalStyles = {
     color: scrollPosition == 0 ? btnBG1 : btnBG2,
   };
-
-  //This will collect the sidebar data(info of side bar with useRef) from the sidebar(child component)
-  function collectSidebarData(data) {
-    setSidebar(data);
-  }
 
   //This will display the side bar
   function handleOpeningSidebar() {
@@ -124,10 +118,10 @@ export default function Header({
           </button>
         </div>
       </header>
+
       <Sidebar
         UpdateSidebarVisibility={handleSidebarDisplay}
         sideBarStatus={showSidebar}
-        sidebarData={collectSidebarData}
       />
     </>
   );

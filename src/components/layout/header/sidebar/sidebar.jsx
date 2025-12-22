@@ -11,11 +11,7 @@ const listItemKeys = {
   contacts: crypto.randomUUID(),
 };
 
-export default function Sidebar({
-  UpdateSidebarVisibility,
-  sideBarStatus,
-  sidebarData,
-}) {
+export default function Sidebar({ UpdateSidebarVisibility, sideBarStatus }) {
   //Array containing the content within the links and keys assigned to the list items
   const navLinksContent = [
     { content: "Concerts", key: listItemKeys.concerts },
@@ -29,11 +25,6 @@ export default function Sidebar({
   function closeSideBar() {
     UpdateSidebarVisibility(false);
   }
-
-  useEffect(() => {
-    //Send the sidebar object obtained using useRef to the header
-    sidebarData(sidebarRef);
-  }, [sidebarData]);
 
   return (
     <dialog
