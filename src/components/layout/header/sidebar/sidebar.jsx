@@ -45,20 +45,71 @@ export default function Sidebar({
 
   useEffect(() => {
     // Focus the logo link first
-    logoLinkRef.current?.focus();
-  }, []);
+    logoLinkRef.current.focus();
 
-  // Escape key handler
-  useEffect(() => {
+    // Escape key handler
     const handleEscape = (e) => {
       if (e.key === "Escape" && sideBarStatus) {
         closeSideBar();
       }
     };
 
+    //Trap focus within the side bar
+    const handleTabKey = (e) => {
+      if (e.key === "Tab") {
+        e.preventDefault();
+        const focusableElements = [
+          logoLinkRef.current,
+          closeSideBarBTNRef.current,
+          concertsLinkRef.current,
+          chartsLinkRef.current,
+          myMusicLinkRef.current,
+          contactsLinkRef.current,
+        ];
+
+        if (focusableElements.length) {
+          const first = focusableElements[0];
+          const last = focusableElements[focusableElements.length - 1];
+
+          // TRAP LOGIC
+
+          //Locate the position of the focused element within focusableElement array
+          const currentIndex = focusableElements.indexOf(
+            document.activeElement,
+          );
+
+          let nextIndex;
+
+          if (e.shiftKey) {
+            // Shift + Tab
+            if (currentIndex == 0) {
+              nextIndex = focusableElements.length - 1; // Loop to last
+            } else {
+              nextIndex = currentIndex - 1;
+            }
+          } else {
+            // Tab only
+            if (currentIndex == focusableElements.length - 1) {
+              nextIndex = 0; // Loop to first
+            } else {
+              nextIndex = currentIndex + 1;
+            }
+          }
+
+          focusableElements[nextIndex].focus();
+        }
+      }
+    };
+
     document.addEventListener("keydown", handleEscape);
-    return () => document.removeEventListener("keydown", handleEscape);
-  }, [sideBarStatus]); // ✅ closeModal is stable, no need in deps
+    document.addEventListener("keydown", handleTabKey);
+
+    //cleanup - remove the event listener to prevent memory leak
+    return () => {
+      document.removeEventListener("keydown", handleEscape);
+      document.removeEventListener("keydown", handleTabKey);
+    };
+  }, [sideBarStatus]); //
 
   return (
     <dialog
@@ -71,7 +122,11 @@ export default function Sidebar({
     >
       <div className={Styles.contentWrapper}>
         <div className={Styles.headerContainer}>
-          <a className={Styles.logoContainer} ref={logoLinkRef}>
+          <a
+            className={Styles.logoContainer}
+            ref={logoLinkRef}
+            href="google.com"
+          >
             <div className={Styles.logoWrapper} aria-hidden="true">
               <img src={Logo} alt="Musicfier" className={Styles.logo} />
             </div>
@@ -90,12 +145,12 @@ export default function Sidebar({
         <nav className={Styles.navContainer}>
           <ul className={Styles.listContainer}>
             {navLinksContent.map((element) => (
-              <li
-                className={Styles.navListItem}
-                key={element.key}
-                ref={element.ref}
-              >
-                <a href="" className={Styles.navlink}>
+              <li className={Styles.navListItem} key={element.key}>
+                <a
+                  href="google.com"
+                  className={Styles.navlink}
+                  ref={element.ref}
+                >
                   {element.content}
                 </a>
               </li>
