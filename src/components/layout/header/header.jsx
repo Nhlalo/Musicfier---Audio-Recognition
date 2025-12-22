@@ -25,6 +25,8 @@ export default function Header({
   const [scrollPosition, setScrollPosition] = useState(0);
   const [showSidebar, setShowSidebar] = useState(false);
 
+  const lastFocusedElement = useRef(null);
+
   //Array containing the content within the links and keys assigned to the list items
   const navLinksContent = [
     { content: "Concerts", key: listItemKeys.concerts },
@@ -65,6 +67,9 @@ export default function Header({
 
   //This will display the side bar
   function handleOpeningSidebar() {
+    //Store the last focused element before opening the sidebar
+    lastFocusedElement.current = document.activeElement;
+
     setShowSidebar(true);
   }
 
@@ -118,10 +123,10 @@ export default function Header({
           </button>
         </div>
       </header>
-
       <Sidebar
         UpdateSidebarVisibility={handleSidebarDisplay}
         sideBarStatus={showSidebar}
+        lastFocusedElement={lastFocusedElement}
       />
     </>
   );
