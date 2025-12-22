@@ -11,7 +11,11 @@ const listItemKeys = {
   contacts: crypto.randomUUID(),
 };
 
-export default function Sidebar({ UpdateSidebarVisibility, sideBarStatus }) {
+export default function Sidebar({
+  UpdateSidebarVisibility,
+  sideBarStatus,
+  lastFocusedElement,
+}) {
   //Array containing the content within the links and keys assigned to the list items
   const navLinksContent = [
     { content: "Concerts", key: listItemKeys.concerts },
@@ -23,7 +27,13 @@ export default function Sidebar({ UpdateSidebarVisibility, sideBarStatus }) {
 
   //Close the side bar
   function closeSideBar() {
+    const elementToRestore = lastFocusedElement.current;
     UpdateSidebarVisibility(false);
+
+    //Ensures that the element is refocused after the state update
+    requestAnimationFrame(() => {
+      elementToRestore.focus();
+    });
   }
 
   return (
