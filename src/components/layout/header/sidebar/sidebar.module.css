@@ -101,3 +101,6 @@
   font-size: 20px;
   color: var(--main-clr);
 }
+.navlink:focus {
+  color: gray;
+}
