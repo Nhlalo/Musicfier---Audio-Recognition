@@ -16,14 +16,21 @@ export default function Sidebar({
   sideBarStatus,
   lastFocusedElement,
 }) {
+  const sidebarRef = useRef(null);
+  const logoLinkRef = useRef(null);
+  const closeSideBarBTNRef = useRef(null);
+  const concertsLinkRef = useRef(null);
+  const chartsLinkRef = useRef(null);
+  const myMusicLinkRef = useRef(null);
+  const contactsLinkRef = useRef(null);
+
   //Array containing the content within the links and keys assigned to the list items
   const navLinksContent = [
-    { content: "Concerts", key: listItemKeys.concerts },
-    { content: "Charts", key: listItemKeys.charts },
-    { content: "My Music", key: listItemKeys.mymusic },
-    { content: "Contacts", key: listItemKeys.contacts },
+    { content: "Concerts", key: listItemKeys.concerts, ref: concertsLinkRef },
+    { content: "Charts", key: listItemKeys.charts, ref: chartsLinkRef },
+    { content: "My Music", key: listItemKeys.mymusic, ref: myMusicLinkRef },
+    { content: "Contacts", key: listItemKeys.contacts, ref: contactsLinkRef },
   ];
-  const sidebarRef = useRef(null);
 
   //Close the side bar
   function closeSideBar() {
@@ -36,6 +43,23 @@ export default function Sidebar({
     });
   }
 
+  useEffect(() => {
+    // Focus the logo link first
+    logoLinkRef.current?.focus();
+  }, []);
+
+  // Escape key handler
+  useEffect(() => {
+    const handleEscape = (e) => {
+      if (e.key === "Escape" && sideBarStatus) {
+        closeSideBar();
+      }
+    };
+
+    document.addEventListener("keydown", handleEscape);
+    return () => document.removeEventListener("keydown", handleEscape);
+  }, [sideBarStatus]); // ✅ closeModal is stable, no need in deps
+
   return (
     <dialog
       className={
@@ -47,7 +71,7 @@ export default function Sidebar({
     >
       <div className={Styles.contentWrapper}>
         <div className={Styles.headerContainer}>
-          <a className={Styles.logoContainer}>
+          <a className={Styles.logoContainer} ref={logoLinkRef}>
             <div className={Styles.logoWrapper} aria-hidden="true">
               <img src={Logo} alt="Musicfier" className={Styles.logo} />
             </div>
@@ -55,14 +79,22 @@ export default function Sidebar({
               MUSICFIER
             </figcaption>
           </a>
-          <button aria-label="Close the side bar" onClick={closeSideBar}>
+          <button
+            aria-label="Close the side bar"
+            onClick={closeSideBar}
+            ref={closeSideBarBTNRef}
+          >
             <X className={Styles.closeIcon} aria-hidden="true" />
           </button>
         </div>
         <nav className={Styles.navContainer}>
           <ul className={Styles.listContainer}>
             {navLinksContent.map((element) => (
-              <li className={Styles.navListItem} key={element.key}>
+              <li
+                className={Styles.navListItem}
+                key={element.key}
+                ref={element.ref}
+              >
                 <a href="" className={Styles.navlink}>
                   {element.content}
                 </a>
