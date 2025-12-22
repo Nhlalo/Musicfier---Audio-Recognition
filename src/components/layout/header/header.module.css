@@ -54,11 +54,15 @@
 .logoContainer {
   cursor: pointer;
 }
+
 .navListItem:hover {
   text-decoration: underline;
 }
 .navlink {
+  display: block;
   font-weight: bold;
+  min-width: 9ch;
+  text-align: center;
 }
 
 .dropdownMenu {
