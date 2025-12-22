@@ -28,14 +28,9 @@ export default function Sidebar({
   //Close the side bar
   function closeSideBar() {
     UpdateSidebarVisibility(false);
-    sidebarRef.current.close();
   }
 
   useEffect(() => {
-    //activate the close methode if the sidebar ref exists and sidebar status is false meaning close
-    if (!sideBarStatus && sidebarRef) {
-      sidebarRef.current.close();
-    }
     //Send the sidebar object obtained using useRef to the header
     sidebarData(sidebarRef);
   }, [sidebarData]);

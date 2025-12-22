@@ -72,9 +72,6 @@ export default function Header({
   //This will display the side bar
   function handleOpeningSidebar() {
     setShowSidebar(true);
-    if (sidebar) {
-      sidebar.current.showModal();
-    }
   }
 
   //This will be passed down to the sidebar(child component)
