@@ -40,6 +40,7 @@
   width: min(90vw, 1128px);
   margin: 0 auto 40px;
   overflow: hidden; /* Hides overflow */
+  padding: 0;
 }
 
 .artistImg {
@@ -49,12 +50,25 @@
 .top50,
 .featuredArtists {
   position: absolute;
-  z-index: 100;
   left: 15px;
 }
 .featuredArtists {
   bottom: 15px;
   color: #fff;
+}
+.viewChart {
+  color: #fff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  left: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  font-weight: 700;
+  font-size: 1.25rem;
 }
 .top50 {
   bottom: 40px;
