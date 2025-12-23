@@ -104,6 +104,22 @@
   background: linear-gradient(to left, #fff 0.9%, transparent 9%);
   z-index: 100;
 }
+.chartNavigatorBTNContainer {
+  width: 100%;
+  width: min(90vw, 1128px);
+  height: 28px;
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+}
+.toLeftBTN,
+.toRightBTN {
+  display: flex;
+  width: 28px;
+  border-radius: 50%;
+  align-items: center;
+  justify-content: center;
+}
 
 @media (min-width: 768px) {
   :root {
