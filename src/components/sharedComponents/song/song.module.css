@@ -1,0 +1,72 @@
+:root {
+  --songProfile-gap: 10px;
+}
+.songProfileLink {
+  display: flex;
+  padding: 20px 0;
+  gap: var(--songProfile-gap);
+}
+.playSongWrapper {
+  display: flex;
+}
+.chartPosition,
+.playSongBTN,
+.playIconContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.chartPosition {
+  width: 40px;
+  min-width: 40px;
+  height: 75px;
+  color: #000;
+  font-weight: 700;
+}
+.playSongBTN {
+  width: 75px;
+  min-width: 75px;
+  height: 75px;
+  position: relative;
+  border-radius: 8px;
+}
+.artistImg {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.playIconContainer {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: white;
+  padding: 0 1;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: rgba(0, 0, 0, 0.5);
+}
+.songPlayIcon {
+  color: #fff;
+  fill: #fff;
+}
+.songInforWrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 5px;
+  color: #000;
+}
+.songName {
+  font-weight: 700;
+}
+.artistName {
+  color: #3f3f41;
+}
+
+@media (min-width: 768px) {
+  :root {
+    --songProfile-gap: 20px;
+  }
+}
