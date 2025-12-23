@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import Styles from "./song.module.css";
 import artistImg from "../../../assets/artistImg.jpg";
-import { Play } from "lucide-react";
+import { Play, ChevronRight, ChevronLeft } from "lucide-react";
 
 function Song() {
   return (
@@ -55,39 +55,57 @@ function Song() {
 
 export default function ChartContainer() {
   return (
-    <div className={Styles.chartContainer}>
-      <div className={Styles.overlay}></div>
-      <Song />
-      <Song />
-      <Song />
-      <Song />
-      <Song />
-      <Song />
-      <Song />
-      <Song />
-      <Song />
-      <Song />
-      <Song />
-      <Song />
-      <Song />
-      <Song />
-      <Song />
-      <Song />
-      <Song />
-      <Song />
-      <Song />
-      <Song />
-      <Song />
-      <Song />
-      <Song />
-      <Song />
-      <Song />
-      <Song />
-      <Song />
-      <Song />
-      <Song />
-      <Song />
-      <Song />
-    </div>
+    <>
+      <div className={Styles.chartContainer}>
+        <div className={Styles.overlay}></div>
+        <Song />
+        <Song />
+        <Song />
+        <Song />
+        <Song />
+        <Song />
+        <Song />
+        <Song />
+        <Song />
+        <Song />
+        <Song />
+        <Song />
+        <Song />
+        <Song />
+        <Song />
+        <Song />
+        <Song />
+        <Song />
+        <Song />
+        <Song />
+        <Song />
+        <Song />
+        <Song />
+        <Song />
+        <Song />
+        <Song />
+        <Song />
+        <Song />
+        <Song />
+        <Song />
+        <Song />
+      </div>
+      <div className={Styles.chartNavigatorBTNContainer}>
+        <button
+          type="button"
+          aria-label="Shift to the left to view the previous part of the chart"
+          className={Styles.toLeftBTN}
+        >
+          <ChevronLeft aria-hidden="true" className={Styles.toLeftIcon} />
+        </button>
+        <button
+          type="button"
+          aria-label="Shift to the right to view the rest of the chart"
+          className={Styles.toRightBTN}
+        >
+          <ChevronRight aria-hidden="true" className={Styles.toRightIcon} />
+        </button>
+      </div>
+    </>
   );
 }
