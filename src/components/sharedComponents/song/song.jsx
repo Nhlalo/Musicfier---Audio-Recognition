@@ -1,19 +1,28 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 import Styles from "./song.module.css";
 import artistImg from "../../../assets/artistImg.jpg";
 import { Play, ChevronRight, ChevronLeft } from "lucide-react";
+import {
+  getScrollAmount,
+  updateButtons,
+  scrollGrid,
+  handleResize,
+  updateLeftEdgeSong,
+  scrollToSongAtLeftEdge,
+} from "../../../utilis/scrollGrid/scrollgrid";
 
-function Song() {
+function Song({ index }) {
   return (
     <a
       href="google.com"
       aria-label="View the song profile"
       className={Styles.songProfileLink}
+      data-song-index={index}
     >
       <div className={Styles.songProfileWrapper}>
         <div className={Styles.playSongWrapper}>
           <span aria-label="Chart Position: " className={Styles.chartPosition}>
-            1
+            {index + 1}
           </span>
           <button
             type="button"
@@ -37,14 +46,14 @@ function Song() {
             aria-label="View the song profile"
             className={Styles.songName}
           >
-            Headlines
+            Song {index + 1}
           </a>
           <a
             href="google.com"
             aria-label="View the artist's profile"
             className={Styles.artistName}
           >
-            Drake
+            Artist
           </a>
         </div>
       </div>
@@ -54,54 +63,178 @@ function Song() {
 }
 
 export default function ChartContainer() {
+  const chartContainerRef = useRef(null);
+  const resizeTimeoutRef = useRef(null);
+  const leftEdgeSongRef = useRef(0);
+  const isResizingRef = useRef(false);
+  const originalScrollBehaviorRef = useRef("smooth"); // Store original behavior
+
+  const [scrollStartStatus, setScrollStartStatus] = useState(true);
+  const [scrollEndStatus, setScrollEndStatus] = useState(false);
+
+  // ===== CUSTOM HOOKS FOR SCROLL LOGIC =====
+
+  const updateButtonsCallback = useCallback(() => {
+    if (!chartContainerRef.current) return;
+
+    const maxScroll = Math.max(
+      0,
+      chartContainerRef.current.scrollWidth -
+        chartContainerRef.current.clientWidth,
+    );
+    const currentScroll = chartContainerRef.current.scrollLeft;
+
+    setScrollStartStatus(currentScroll <= 1);
+    setScrollEndStatus(currentScroll >= maxScroll - 1);
+  }, []);
+
+  const updateLeftEdgeSongCallback = useCallback(() => {
+    if (!chartContainerRef.current) return;
+    leftEdgeSongRef.current = updateLeftEdgeSong(chartContainerRef.current);
+  }, []);
+
+  const scrollToSongCallback = useCallback((songIndex) => {
+    if (!chartContainerRef.current) return;
+    scrollToSongAtLeftEdge(chartContainerRef.current, songIndex);
+    leftEdgeSongRef.current = songIndex;
+  }, []);
+
+  const scrollGridCallback = useCallback(
+    (direction) => {
+      if (!chartContainerRef.current || isResizingRef.current) return;
+
+      // Restore smooth scrolling if it was disabled
+      const grid = chartContainerRef.current;
+      if (grid.style.scrollBehavior === "auto") {
+        grid.style.scrollBehavior =
+          originalScrollBehaviorRef.current || "smooth";
+      }
+
+      updateLeftEdgeSongCallback();
+
+      scrollGrid(
+        chartContainerRef.current,
+        direction,
+        updateButtonsCallback,
+        getScrollAmount(),
+      );
+
+      updateLeftEdgeSongCallback();
+    },
+    [updateButtonsCallback, updateLeftEdgeSongCallback],
+  );
+
+  const handleResizeCallback = useCallback(() => {
+    if (!chartContainerRef.current || isResizingRef.current) return;
+
+    isResizingRef.current = true;
+    const grid = chartContainerRef.current;
+
+    // Store original scroll behavior BEFORE changing it
+    originalScrollBehaviorRef.current = grid.style.scrollBehavior || "smooth";
+
+    updateLeftEdgeSongCallback();
+    const songToKeepVisible = leftEdgeSongRef.current;
+
+    // Disable smooth scroll temporarily
+    grid.style.scrollBehavior = "auto";
+    document.body.classList.add("no-transitions");
+
+    clearTimeout(resizeTimeoutRef.current);
+    resizeTimeoutRef.current = setTimeout(() => {
+      handleResize(
+        chartContainerRef.current,
+        songToKeepVisible,
+        scrollToSongCallback,
+        updateButtonsCallback,
+        isResizingRef,
+      );
+
+      // RESTORE smooth scrolling after resize is complete
+      setTimeout(() => {
+        grid.style.scrollBehavior = originalScrollBehaviorRef.current;
+        document.body.classList.remove("no-transitions");
+      }, 100); // Slightly longer delay to ensure restore
+    }, 200);
+  }, [updateLeftEdgeSongCallback, scrollToSongCallback, updateButtonsCallback]);
+
+  // ===== EVENT LISTENERS =====
+
+  useEffect(() => {
+    // Initialize with smooth scrolling
+    const grid = chartContainerRef.current;
+    if (grid) {
+      originalScrollBehaviorRef.current = grid.style.scrollBehavior || "smooth";
+      grid.style.scrollBehavior = "smooth";
+    }
+
+    updateLeftEdgeSongCallback();
+    updateButtonsCallback();
+
+    window.addEventListener("resize", handleResizeCallback);
+
+    const handleScroll = () => {
+      if (!isResizingRef.current) {
+        updateLeftEdgeSongCallback();
+        updateButtonsCallback();
+      }
+    };
+
+    if (grid) {
+      grid.addEventListener("scroll", handleScroll);
+    }
+
+    return () => {
+      window.removeEventListener("resize", handleResizeCallback);
+      clearTimeout(resizeTimeoutRef.current);
+      if (grid) {
+        grid.removeEventListener("scroll", handleScroll);
+      }
+    };
+  }, [handleResizeCallback, updateLeftEdgeSongCallback, updateButtonsCallback]);
+
+  // ===== EVENT HANDLERS =====
+
+  const handleLeftScroll = () => scrollGridCallback("left");
+  const handleRightScroll = () => scrollGridCallback("right");
+
+  // Create 21 songs
+  const songs = Array.from({ length: 21 }, (_, i) => (
+    <Song key={i} index={i} />
+  ));
+
   return (
     <>
       <div className={Styles.chartContainer}>
         <div className={Styles.overlay}></div>
-        <Song />
-        <Song />
-        <Song />
-        <Song />
-        <Song />
-        <Song />
-        <Song />
-        <Song />
-        <Song />
-        <Song />
-        <Song />
-        <Song />
-        <Song />
-        <Song />
-        <Song />
-        <Song />
-        <Song />
-        <Song />
-        <Song />
-        <Song />
-        <Song />
-        <Song />
-        <Song />
-        <Song />
-        <Song />
-        <Song />
-        <Song />
-        <Song />
-        <Song />
-        <Song />
-        <Song />
+        <div className={Styles.chartWrapper} ref={chartContainerRef}>
+          {songs}
+        </div>
       </div>
       <div className={Styles.chartNavigatorBTNContainer}>
         <button
           type="button"
           aria-label="Shift to the left to view the previous part of the chart"
-          className={Styles.toLeftBTN}
+          onClick={handleLeftScroll}
+          disabled={scrollStartStatus}
+          className={
+            scrollStartStatus
+              ? `${Styles.toLeftBTN} ${Styles.btnDisable}`
+              : `${Styles.toLeftBTN}`
+          }
         >
           <ChevronLeft aria-hidden="true" className={Styles.toLeftIcon} />
         </button>
         <button
           type="button"
           aria-label="Shift to the right to view the rest of the chart"
-          className={Styles.toRightBTN}
+          onClick={handleRightScroll}
+          disabled={scrollEndStatus}
+          className={
+            scrollEndStatus
+              ? `${Styles.toRightBTN} ${Styles.btnDisable}`
+              : `${Styles.toRightBTN}`
+          }
         >
           <ChevronRight aria-hidden="true" className={Styles.toRightIcon} />
         </button>
