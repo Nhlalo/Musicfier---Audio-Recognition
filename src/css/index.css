@@ -30,3 +30,7 @@ a {
   color: inherit;
   cursor: pointer;
 }
+h2 {
+  margin: 0;
+  font-weight: 700;
+}
