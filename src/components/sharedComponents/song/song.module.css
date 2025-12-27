@@ -81,6 +81,7 @@
 .chartContainer {
   width: min(90vw, 1128px);
   position: relative;
+  margin-top: 25px;
 }
 .chartWrapper {
   width: 100%;
