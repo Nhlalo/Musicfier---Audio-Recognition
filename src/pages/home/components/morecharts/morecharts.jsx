@@ -48,3 +48,17 @@ function MoreCharts({ location = "South Africa" }) {
     </a>
   );
 }
+
+export default function MoreChartsContainer() {
+  return (
+    <section className={Styles.moreChartsContainer}>
+      <div className={Styles.moreChartsWrapper}>
+        <h2 className={Styles.moreChartsHeading}>More Charts</h2>
+        <div className={Styles.miniChartsContainer}>
+          <MoreCharts />
+          <MoreCharts />
+        </div>
+      </div>
+    </section>
+  );
+}
