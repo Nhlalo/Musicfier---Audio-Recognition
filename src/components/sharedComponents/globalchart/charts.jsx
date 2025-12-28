@@ -1,24 +1,53 @@
 import React, { useState, useEffect, useRef } from "react";
 import Styles from "./charts.module.css";
-import artistImg from "../../../../assets/artistImg.jpg";
+import artistImg from "../../../assets/artistImg.jpg";
 import { ChevronRight } from "lucide-react";
 
-export default function Charts() {
+export default function Charts({
+  mainBG = "#fff",
+  displayFeaturedArtistsImg,
+  heading,
+  headingDescr,
+  miniHeading,
+  displayChart,
+  subHeading,
+  chartContainer,
+  featuredArtists,
+}) {
   const [hoverStatus, setHoverStatus] = useState(false);
   const displayChartBTN = useRef(null);
 
   return (
-    <section className={Styles.globalChart}>
+    <section
+      className={Styles.globalChart}
+      style={{ backgroundColor: `${mainBG}` }}
+    >
       <div className={Styles.globalChartWrapper}>
+        <div
+          className={Styles.featuredArtistsImgContainer}
+          style={{ display: displayFeaturedArtistsImg ? "flex" : "none" }}
+        >
+          <img
+            src={artistImg}
+            alt="Featured artists on this chart"
+            className={Styles.supportingImg}
+          />
+          <img
+            src={artistImg}
+            alt="Featured artists on this chart"
+            className={Styles.mainImg}
+          />
+          <img
+            src={artistImg}
+            alt="Featured artists on this chart"
+            className={Styles.supportingImg2}
+          />
+        </div>
         <div className={Styles.chartDesriptionContainer}>
           <div className={Styles.chartDescriptionWrapper}>
-            <span className={Styles.chartHeading}>Global Top 50</span>
-            <h2 className={Styles.chartDescription}>
-              Top Songs being discovered around the world right now
-            </h2>
-            <p className={Styles.artistChartDescr}>
-              See who made it on the list of the top songs worldwide on Musicfy
-            </p>
+            <span className={Styles.chartHeading}>{heading}</span>
+            <h2 className={Styles.chartDescription}>{headingDescr}</h2>
+            <p className={Styles.artistChartDescr}>{miniHeading}</p>
           </div>
           <button
             aria-label="View the chart"
@@ -27,6 +56,7 @@ export default function Charts() {
             ref={displayChartBTN}
             onMouseEnter={() => setHoverStatus(true)}
             onMouseLeave={() => setHoverStatus(false)}
+            style={{ display: displayChart ? "block" : "none" }}
           >
             <img
               src={artistImg}
@@ -59,7 +89,7 @@ export default function Charts() {
         </div>
         <div className={Styles.top50SongsContainer}>
           <div className={Styles.top50SongsWrapper}>
-            <h2>Global Top 50 Chart</h2>
+            <h2 className={Styles.heading}>{subHeading}</h2>
             <button
               type="button"
               aria-label="View the whole global top 50 chart"
@@ -69,6 +99,14 @@ export default function Charts() {
             </button>
           </div>
           <hr className={Styles.mainHr} aria-hidden="true" />
+          {chartContainer}
+        </div>
+        <div className={Styles.featuredArtistsContainer}>
+          <div className={Styles.featuredArtistsWrapper}>
+            <h2 className={Styles.heading}>Featured Artists</h2>
+          </div>
+          <hr className={Styles.mainHr} aria-hidden="true" />
+          {featuredArtists}
         </div>
       </div>
     </section>
