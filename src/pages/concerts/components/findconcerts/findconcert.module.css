@@ -4,6 +4,9 @@
   display: flex;
   color: #000;
 }
+.concertLink:hover {
+  background-color: rgba(0, 0, 0, 0.05);
+}
 .artistImage {
   width: 100px;
   height: 120px;
@@ -40,4 +43,80 @@
   align-self: flex-start;
   padding: 5px;
   margin-top: auto;
+}
+.allConcertsContainer {
+  padding: 20px;
+  background-color: #fff;
+  width: 100%;
+}
+.concertCountry,
+.allConcertsDescr {
+  text-align: center;
+}
+.concertCountry {
+  font-size: 24px;
+  color: #000;
+  font-weight: 700;
+  margin: 15px 0;
+}
+.country {
+  color: #0077ff;
+}
+.allConcertsDescr {
+  font-weight: 400;
+  margin-bottom: 30px;
+  color: #3a3a3c;
+}
+.searchFilterContainer {
+  padding: 16px 0;
+  display: flex;
+  gap: 20px;
+}
+.concertInputSearch {
+  appearance: none;
+  font-size: 16px;
+  padding: 11px 20px 11px 37px;
+  width: 100%;
+  background-color: #f4f4f4;
+  border-radius: 9999px;
+  flex-grow: 1;
+}
+/* Browser support for place holder styling*/
+::placeholder,
+::-webkit-input-placeholder,
+::-moz-placeholder,
+:-ms-input-placeholder,
+:-moz-placeholder {
+  color: #8f8f8f;
+  opacity: 1; /* Firefox reduces opacity by default */
+}
+.filterBTN,
+.filterIcon {
+  color: rgb(59, 134, 247);
+}
+.filterBTN {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 0 16px;
+  background-color: rgba(0, 102, 255, 0.1);
+  border-radius: 999px;
+}
+.filterIcon {
+  width: 18px;
+  height: 18px;
+}
+.filter {
+  display: none;
+}
+.artistConcertContainer {
+  margin: 0;
+}
+@media (min-width: 768px) {
+  .filter {
+    display: inline;
+  }
+  .artistConcertContainer {
+    margin: 0 10%;
+  }
 }
