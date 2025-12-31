@@ -1,12 +1,13 @@
 import Styles from "./findconcert.module.css";
-import { Calendar } from "lucide-react";
+import { Calendar, Rows3 } from "lucide-react";
 import artistImg from "../../../../assets/artistImg.jpg";
 
-export default function ArtistConcert({
+function ArtistConcert({
   artist = "Drake",
   location = "Black River Park, Capetown",
   date = "Wednesday, December 31, 2025",
   genre = "HipHop",
+  country = "South Africa",
 }) {
   return (
     <a
@@ -31,5 +32,56 @@ export default function ArtistConcert({
         <span className={Styles.genre}>{genre}</span>
       </div>
     </a>
+  );
+}
+
+export default function Concerts() {
+  return (
+    <section className={Styles.allConcertsContainer}>
+      <div className={Styles.allConcertsWrapper}>
+        <h1 className={Styles.concertCountry}>
+          Concerts in <span className={Styles.country}>South Africa</span>{" "}
+        </h1>
+        <p className={Styles.allConcertsDescr}>
+          Find live music events in South Africa, get concert tickets, see tour
+          dates and more.
+        </p>
+        <div className={Styles.searchFilterContainer}>
+          <input
+            type="text"
+            name="concerts"
+            className={Styles.concertInputSearch}
+            placeholder="Artists or Bands"
+            aria-label="Search for an artist's or a bands's concerts"
+          />
+          <button type="button" className={Styles.filterBTN}>
+            <Rows3 className={Styles.filterIcon} aria-hidden="true" />
+            <span className={Styles.filter}>Filter</span>
+          </button>
+        </div>
+        {/* Concerts by the searched artists will appear here */}
+        <div className={Styles.artistConcertContainer}>
+          <ArtistConcert />
+          <ArtistConcert />
+          <ArtistConcert />
+          <ArtistConcert />
+          <ArtistConcert />
+          <ArtistConcert />
+          <ArtistConcert />
+          <ArtistConcert />
+          <ArtistConcert />
+          <ArtistConcert />
+          <ArtistConcert />
+          <ArtistConcert />
+          <ArtistConcert />
+          <ArtistConcert />
+          <ArtistConcert />
+          <ArtistConcert />
+          <ArtistConcert />
+          <ArtistConcert />
+          <ArtistConcert />
+        </div>
+      </div>
+    </section>
   );
 }
