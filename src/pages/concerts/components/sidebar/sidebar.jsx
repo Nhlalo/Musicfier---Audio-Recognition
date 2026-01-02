@@ -1,5 +1,5 @@
 import Styles from "./sidebar.module.css";
-import { ChevronDown, MapPinCheck, Calendar, X } from "lucide-react";
+import { ChevronDown, MapPinCheck, Calendar, X, Search } from "lucide-react";
 
 function Duration({ startDate = "2024-01-02", endDate = "2025-01-04" }) {
   return (
@@ -112,6 +112,10 @@ export default function Sidebar({ location = "South Africa" }) {
           <span className={Styles.newLocation}>New Location</span>{" "}
           <ChevronDown aria-hidden="true" />
         </button>
+        <div className={Styles.countryInputContainer}>
+          <Search className={Styles.searchIcon} />
+          <input type="text" name="country" className={Styles.countryInput} />
+        </div>
       </div>
     </aside>
   );

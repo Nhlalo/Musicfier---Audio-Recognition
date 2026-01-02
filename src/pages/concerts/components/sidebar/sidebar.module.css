@@ -134,3 +134,29 @@
 .endDate {
   margin-top: 16px;
 }
+.countryInputContainer {
+  margin-top: 16px;
+  position: relative;
+  color: rgba(60, 60, 67, 0.6);
+}
+.countryInputContainer:focus-within {
+  color: rgb(0, 136, 255);
+}
+.countryInput {
+  appearance: none;
+  border: none;
+  width: 100%;
+  border-radius: 999px;
+  padding: 0.7rem 1rem;
+  padding-left: 35px;
+}
+.countryInput:focus {
+  outline: 0.1rem solid #066bff;
+}
+.searchIcon {
+  position: absolute;
+  top: 8px;
+  left: 10px;
+  width: 18px;
+  height: 18px;
+}
