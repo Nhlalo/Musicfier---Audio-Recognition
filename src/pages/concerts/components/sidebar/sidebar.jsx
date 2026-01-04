@@ -1,5 +1,12 @@
 import Styles from "./sidebar.module.css";
-import { ChevronDown, MapPinCheck, Calendar, X, Search } from "lucide-react";
+import {
+  ChevronDown,
+  ChevronUp,
+  MapPinCheck,
+  Calendar,
+  X,
+  Search,
+} from "lucide-react";
 import { useState, useEffect, useRef, forwardRef } from "react";
 import { openDialog, closeDialog } from "../../../../utilis/side bar/sidebar";
 
@@ -12,9 +19,10 @@ function Duration({
   endDate = "2025-01-04",
   startDateInputRef,
   endDateInputRef,
+  customRangeClassName,
 }) {
   return (
-    <div className={Styles.dateContainer}>
+    <div className={customRangeClassName}>
       <div className={Styles.startDateContainer}>
         <label htmlFor="startDate" className={Styles.start}>
           Starts
@@ -45,7 +53,12 @@ function Duration({
   );
 }
 const Sidebarby = forwardRef(function (props, ref) {
+  const [concertDurationVisibility, setConcertDurationVisibility] =
+    useState("hide");
+
   const { location, showBTNRef } = props; // Destructure from props
+
+  //All the elements that must be within the tabindex when the side bar is open
   const upcomingBTNRef = useRef(null);
   const todayBTNRef = useRef(null);
   const tommorrowBTNRef = useRef(null);
@@ -79,6 +92,16 @@ const Sidebarby = forwardRef(function (props, ref) {
     searchInputBTNRef.current,
   ];
   focusableElements = allFocusableElements;
+
+  //Display the concert duration
+  function handleShowCustomDurationVisibility() {
+    setConcertDurationVisibility("show");
+  }
+
+  //Hide the concert duration
+  function handleHideCustomDurationVisibility() {
+    setConcertDurationVisibility("hide");
+  }
 
   return (
     <dialog
@@ -128,14 +151,28 @@ const Sidebarby = forwardRef(function (props, ref) {
           type="button"
           className={Styles.customRangeBTN}
           ref={customRangeBTNRef}
+          onClick={
+            concertDurationVisibility == "hide"
+              ? handleShowCustomDurationVisibility
+              : handleHideCustomDurationVisibility
+          }
         >
           <Calendar aria-hidden="true" />{" "}
           <span className={Styles.customRange}>Custom Range</span>{" "}
-          <ChevronDown aria-hidden="true" />
+          {concertDurationVisibility == "hide" ? (
+            <ChevronDown aria-hidden="true" />
+          ) : (
+            <ChevronUp aria-hidden="true" />
+          )}
         </button>
         <Duration
           startDateInputRef={startBTNRef}
           endDateInputRef={endsBTNRef}
+          customRangeClassName={
+            concertDurationVisibility == "show"
+              ? Styles.dateContainer
+              : Styles.noVisibility
+          }
         />
       </div>
       <div className={Styles.whereContainer}>
