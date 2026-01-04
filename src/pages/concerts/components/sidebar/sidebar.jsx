@@ -61,7 +61,10 @@ const Sidebarby = forwardRef(function (props, ref) {
   const [locationSearchVisibility, setLocationSearchVisibility] =
     useState("hide");
 
-  const { location, showBTNRef } = props; // Destructure from props
+  //Determine if the recent location searches are cleared
+  const [clearLocation, setClearLocation] = useState(false);
+
+  const { location = "South Africa", showBTNRef } = props; // Destructure from props
 
   //All the elements that must be within the tabindex when the side bar is open
   const upcomingBTNRef = useRef(null);
@@ -115,6 +118,11 @@ const Sidebarby = forwardRef(function (props, ref) {
   //Hide the location search duration
   function handleHideLocationSearch() {
     setLocationSearchVisibility("hide");
+  }
+
+  //Clear the recent location search
+  function handleClearLocation() {
+    setClearLocation(true);
   }
 
   return (
@@ -198,7 +206,12 @@ const Sidebarby = forwardRef(function (props, ref) {
             <h3 className={Styles.where} aria-hidden="true">
               Where?
             </h3>
-            <button type="button" className={Styles.clearBTN} ref={clearBTNRef}>
+            <button
+              type="button"
+              className={Styles.clearBTN}
+              ref={clearBTNRef}
+              onClick={handleClearLocation}
+            >
               clear
             </button>
           </div>
@@ -213,13 +226,21 @@ const Sidebarby = forwardRef(function (props, ref) {
           </button>
           <button
             type="button"
-            className={`${Styles.usa} ${Styles.BTNs}`}
+            className={
+              clearLocation
+                ? Styles.noVisibility
+                : `${Styles.usa} ${Styles.BTNs}`
+            }
             ref={firstCountryBTNRef}
           >
             USA
           </button>
         </div>
-        <div className={Styles.locationContainer}>
+        <div
+          className={
+            clearLocation ? Styles.noVisibility : Styles.locationContainer
+          }
+        >
           <button
             type="button"
             className={`${Styles.australia} ${Styles.BTNs}`}
