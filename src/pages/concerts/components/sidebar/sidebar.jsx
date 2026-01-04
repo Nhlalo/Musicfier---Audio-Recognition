@@ -138,37 +138,39 @@ const Sidebarby = forwardRef(function (props, ref) {
         <h3 className={Styles.when} aria-hidden="true">
           When?
         </h3>
-        <div className={Styles.todayContainer}>
-          <button
-            type="button"
-            className={`${Styles.upcoming} ${Styles.BTNs}`}
-            ref={upcomingBTNRef}
-          >
-            All Upcoming
-          </button>
-          <button
-            type="button"
-            className={`${Styles.today} ${Styles.BTNs}`}
-            ref={todayBTNRef}
-          >
-            Today
-          </button>
-        </div>
-        <div className={Styles.tomorrowContainer}>
-          <button
-            type="button"
-            className={`${Styles.tomorrow} ${Styles.BTNs}`}
-            ref={tommorrowBTNRef}
-          >
-            Tomorrow
-          </button>
-          <button
-            type="button"
-            className={`${Styles.weekend} ${Styles.BTNs}`}
-            ref={weekendBTNRef}
-          >
-            This Weekend
-          </button>
+        <div className={Styles.concertDate}>
+          <div className={Styles.todayContainer}>
+            <button
+              type="button"
+              className={`${Styles.upcoming} ${Styles.BTNs}`}
+              ref={upcomingBTNRef}
+            >
+              All Upcoming
+            </button>
+            <button
+              type="button"
+              className={`${Styles.today} ${Styles.BTNs}`}
+              ref={todayBTNRef}
+            >
+              Today
+            </button>
+          </div>
+          <div className={Styles.tomorrowContainer}>
+            <button
+              type="button"
+              className={`${Styles.tomorrow} ${Styles.BTNs}`}
+              ref={tommorrowBTNRef}
+            >
+              Tomorrow
+            </button>
+            <button
+              type="button"
+              className={`${Styles.weekend} ${Styles.BTNs}`}
+              ref={weekendBTNRef}
+            >
+              This Weekend
+            </button>
+          </div>
         </div>
         <button
           type="button"
@@ -217,45 +219,47 @@ const Sidebarby = forwardRef(function (props, ref) {
             </button>
           </div>
         </div>
-        <div className={Styles.nearMeContainer}>
-          <button
-            type="button"
-            className={`${Styles.nearMe} ${Styles.BTNs}`}
-            ref={nearMeBTNRef}
-          >
-            Near Me
-          </button>
-          <button
-            type="button"
+        <div className={Styles.concertLocationContainer}>
+          <div className={Styles.nearMeContainer}>
+            <button
+              type="button"
+              className={`${Styles.nearMe} ${Styles.BTNs}`}
+              ref={nearMeBTNRef}
+            >
+              Near Me
+            </button>
+            <button
+              type="button"
+              className={
+                clearLocation
+                  ? Styles.noVisibility
+                  : `${Styles.usa} ${Styles.BTNs}`
+              }
+              ref={firstCountryBTNRef}
+            >
+              USA
+            </button>
+          </div>
+          <div
             className={
-              clearLocation
-                ? Styles.noVisibility
-                : `${Styles.usa} ${Styles.BTNs}`
+              clearLocation ? Styles.noVisibility : Styles.locationContainer
             }
-            ref={firstCountryBTNRef}
           >
-            USA
-          </button>
-        </div>
-        <div
-          className={
-            clearLocation ? Styles.noVisibility : Styles.locationContainer
-          }
-        >
-          <button
-            type="button"
-            className={`${Styles.australia} ${Styles.BTNs}`}
-            ref={secondCountryBTNRef}
-          >
-            Australia
-          </button>
-          <button
-            type="button"
-            className={`${Styles.location} ${Styles.BTNs}`}
-            ref={thirdCountryRef}
-          >
-            {location}
-          </button>
+            <button
+              type="button"
+              className={`${Styles.australia} ${Styles.BTNs}`}
+              ref={secondCountryBTNRef}
+            >
+              Australia
+            </button>
+            <button
+              type="button"
+              className={`${Styles.location} ${Styles.BTNs}`}
+              ref={thirdCountryRef}
+            >
+              {location}
+            </button>
+          </div>
         </div>
         <button
           type="button"
@@ -300,6 +304,7 @@ export default function SidebarVisibility() {
   const sidebarRef = useRef(null);
   const showBTNRef = useRef(null);
   const previousFocusedElement = useRef(null);
+  const backdropRef = useRef(null);
 
   useEffect(() => {
     setButtonRef(true);
@@ -325,6 +330,12 @@ export default function SidebarVisibility() {
 
   return (
     <>
+      <div
+        className={
+          visibleButton == "hide" ? Styles.backdrop : Styles.noVisibility
+        }
+        ref={backdropRef}
+      ></div>
       <div className={Styles.filterConcerts}>
         <div className={Styles.headingContainer}>
           <h2 className={Styles.heading}>Filter Concerts</h2>
