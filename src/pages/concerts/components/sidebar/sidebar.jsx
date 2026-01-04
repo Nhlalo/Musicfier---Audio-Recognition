@@ -118,6 +118,7 @@ const Sidebarby = forwardRef(function (props, ref) {
   //Hide the location search duration
   function handleHideLocationSearch() {
     setLocationSearchVisibility("hide");
+    searchInputBTNRef.current.value = "";
   }
 
   //Clear the recent location search
