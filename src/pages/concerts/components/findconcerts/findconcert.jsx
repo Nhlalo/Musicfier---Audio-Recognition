@@ -1,7 +1,17 @@
 import Styles from "./findconcert.module.css";
 import { Calendar, Rows3 } from "lucide-react";
 import artistImg from "../../../../assets/artistImg.jpg";
+import SidebarVisibility from "../sidebar/sidebar";
+import { useState, useEffect } from "react";
 
+//This is a debounce function to help optimization the tracking of the viewport width
+function debounce(func, wait) {
+  let timeout;
+  return function () {
+    clearTimeout(timeout);
+    timeout = setTimeout(() => func.apply(this, arguments), wait);
+  };
+}
 function ArtistConcert({
   artist = "Drake",
   location = "Black River Park, Capetown",
@@ -36,8 +46,44 @@ function ArtistConcert({
 }
 
 export default function Concerts() {
+  const [windowSize, setWindowSize] = useState({
+    width: window.innerWidth,
+    height: window.innerHeight,
+  });
+
+  useEffect(() => {
+    // Debounced resize handler
+    const handleResize = debounce(() => {
+      setWindowSize({
+        width: window.innerWidth,
+        height: window.innerHeight,
+      });
+    }, 250);
+
+    window.addEventListener("resize", handleResize);
+
+    // Initial size
+    setWindowSize({
+      width: window.innerWidth,
+      height: window.innerHeight,
+    });
+
+    // Cleanup
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
+
+  const [filterVisibility, setFilterVisibility] = useState(false);
+  function handleShowFilter() {
+    setFilterVisibility(true);
+  }
+
   return (
     <section className={Styles.allConcertsContainer}>
+      {/* This will make the side bar be visible when the filter button is pressed */}
+      {filterVisibility && <SidebarVisibility />}
+      {windowSize.width >= 1024 && <SidebarVisibility />}
       <div className={Styles.allConcertsWrapper}>
         <h1 className={Styles.concertCountry}>
           Concerts in <span className={Styles.country}>South Africa</span>{" "}
@@ -54,7 +100,11 @@ export default function Concerts() {
             placeholder="Artists or Bands"
             aria-label="Search for an artist's or a bands's concerts"
           />
-          <button type="button" className={Styles.filterBTN}>
+          <button
+            type="button"
+            className={Styles.filterBTN}
+            onClick={handleShowFilter}
+          >
             <Rows3 className={Styles.filterIcon} aria-hidden="true" />
             <span className={Styles.filter}>Filter</span>
           </button>
