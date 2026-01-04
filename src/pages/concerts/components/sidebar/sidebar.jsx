@@ -53,7 +53,12 @@ function Duration({
   );
 }
 const Sidebarby = forwardRef(function (props, ref) {
+  //Determine the visibility of the custom range concert duaration
   const [concertDurationVisibility, setConcertDurationVisibility] =
+    useState("hide");
+
+  //Determine the visibility of the location input search
+  const [locationSearchVisibility, setLocationSearchVisibility] =
     useState("hide");
 
   const { location, showBTNRef } = props; // Destructure from props
@@ -101,6 +106,15 @@ const Sidebarby = forwardRef(function (props, ref) {
   //Hide the concert duration
   function handleHideCustomDurationVisibility() {
     setConcertDurationVisibility("hide");
+  }
+
+  //show the location search duration
+  function handleShowLocationSearch() {
+    setLocationSearchVisibility("show");
+  }
+  //Hide the location search duration
+  function handleHideLocationSearch() {
+    setLocationSearchVisibility("hide");
   }
 
   return (
@@ -225,12 +239,27 @@ const Sidebarby = forwardRef(function (props, ref) {
           type="button"
           className={Styles.newLocationBTN}
           ref={newLocationBTNRef}
+          onClick={
+            locationSearchVisibility == "hide"
+              ? handleShowLocationSearch
+              : handleHideLocationSearch
+          }
         >
           <MapPinCheck aria-hidden="true" />
           <span className={Styles.newLocation}>New Location</span>{" "}
-          <ChevronDown aria-hidden="true" />
+          {locationSearchVisibility == "hide" ? (
+            <ChevronDown aria-hidden="true" />
+          ) : (
+            <ChevronUp aria-hidden="true" />
+          )}
         </button>
-        <div className={Styles.countryInputContainer}>
+        <div
+          className={
+            locationSearchVisibility == "show"
+              ? Styles.countryInputContainer
+              : Styles.noVisibility
+          }
+        >
           <Search className={Styles.searchIcon} />
           <input
             type="text"
