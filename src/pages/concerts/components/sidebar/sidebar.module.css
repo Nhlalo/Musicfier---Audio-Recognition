@@ -21,6 +21,11 @@
   background-color: #e1eae7;
   padding: 1rem 0;
 }
+.sidebarContainer {
+  top: 80px;
+  margin-right: 0;
+  border: none;
+}
 .headingContainer,
 .clearContainer,
 .endDate,
@@ -32,7 +37,8 @@
   padding: 1.25rem 1rem;
 }
 
-.hideBTN {
+.hideBTN,
+.showBTN {
   margin-left: auto;
 }
 .hideBTN,
@@ -40,11 +46,13 @@
 .newLocationBTN,
 .clearBTN,
 .startDate,
-.endDate {
+.endDate,
+.showBTN {
   color: #066bff;
 }
 .hideBTN,
-.BTNs {
+.BTNs,
+.showBTN {
   font-size: 0.875rem;
 }
 .whenContainer,
@@ -159,4 +167,7 @@
   left: 10px;
   width: 18px;
   height: 18px;
+}
+.noVisibility {
+  display: none;
 }
