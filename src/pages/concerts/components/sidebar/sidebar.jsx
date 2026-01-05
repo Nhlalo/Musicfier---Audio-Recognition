@@ -15,13 +15,24 @@ import {
 } from "../../../../utilis/side bar/sidebar";
 import debounce from "../../../../utilis/debounce/debounce";
 import getFocusableElements from "../../../../utilis/focusableElements/focusableelements";
+import {
+  getTodayDate,
+  getTomorrowDate,
+  getDayAfterTomorrowDate,
+  getThisWeekendDates,
+} from "../../../../utilis/date/date";
 
+console.log(getThisWeekendDates().end);
+const today = getTodayDate();
+const tomorrow = getTomorrowDate();
 /* Deal with focusable Elements, place in an array*/
 function Duration({
-  startDate = "2024-01-02",
-  endDate = "2025-01-04",
+  firstDate,
+  lastDate,
   customRangeClassName,
   valueConcertDurationVisibility,
+  startDateRef,
+  endDateRef,
 }) {
   return (
     <div className={customRangeClassName}>
@@ -34,8 +45,10 @@ function Duration({
           id="startDate"
           name="start_date"
           className={Styles.startDate}
-          defaultValue={startDate}
+          value={firstDate}
+          ref={startDateRef}
           disabled={(valueConcertDurationVisibility = "show" ? false : true)}
+          onChange={(e) => setValue(e.target.value)}
         />
       </div>
       <div className={Styles.endDateContainer}>
@@ -47,8 +60,10 @@ function Duration({
           id="endDate"
           name="end_date"
           className={Styles.endDate}
-          defaultValue={endDate}
+          value={lastDate}
+          ref={endDateRef}
           disabled={valueConcertDurationVisibility == "show" ? false : true}
+          onChange={(e) => setValue(e.target.value)}
         />
       </div>
     </div>
@@ -57,6 +72,20 @@ function Duration({
 const Sidebarby = forwardRef(function (props, ref) {
   // Destructure from props
   const { location = "South Africa", sideBarClassName } = props;
+
+  const todayDateRef = useRef(getTodayDate());
+  const tomorrowDateRef = useRef(getTomorrowDate());
+  const dayAfterTomorrowRef = useRef(getDayAfterTomorrowDate());
+  const fridayRef = useRef(getThisWeekendDates().start);
+  const sundayRef = useRef(getThisWeekendDates().end);
+  const searchInputBTNRef = useRef(null);
+  const todayBTNRef = useRef(null);
+  const tomorrowBTNRef = useRef(null);
+  const weekendBTNRef = useRef(null);
+  const startDateInputRef = useRef(null);
+  const endDateInputRef = useRef(null);
+
+  const upcomingInputRef = useRef(null);
 
   const [windowSize, setWindowSize] = useState({
     width: window.innerWidth,
@@ -74,7 +103,16 @@ const Sidebarby = forwardRef(function (props, ref) {
   //Determine if the recent location searches are cleared
   const [clearLocation, setClearLocation] = useState(false);
 
-  const searchInputBTNRef = useRef(null);
+  const [upcomingStatus, setUpcomingStatus] = useState(true);
+
+  const [todayStatus, setTodayStatus] = useState(false);
+
+  const [tomorrowStatus, setTomorrowStatus] = useState(false);
+
+  const [weekendStatus, setWeekendStatus] = useState(false);
+
+  const [startDate, setStartDate] = useState(todayDateRef.current);
+  const [endDate, setEndDate] = useState(tomorrowDateRef.current);
 
   const greaterthan1024 = windowSize.width >= 1024; //Equal or greater than 768px viewport width return true
 
@@ -126,6 +164,35 @@ const Sidebarby = forwardRef(function (props, ref) {
     setClearLocation(true);
   }
 
+  //This will which of four buttons is clicked
+  function updateConcertDurationBTNs(upcoming, today, tommorrow, weekend) {
+    setUpcomingStatus(upcoming);
+    setTodayStatus(today);
+    setTomorrowStatus(tommorrow);
+    setWeekendStatus(weekend);
+  }
+  function handleToday() {
+    setStartDate(todayDateRef.current);
+    setEndDate(tomorrowDateRef.current);
+    updateConcertDurationBTNs(false, true, false, false);
+  }
+  function handleTomorrow() {
+    setStartDate(tomorrowDateRef.current);
+    setEndDate(dayAfterTomorrowRef.current);
+    updateConcertDurationBTNs(false, false, true, false);
+  }
+  function handleWeekend() {
+    setStartDate(fridayRef.current);
+    setEndDate(sundayRef.current);
+
+    updateConcertDurationBTNs(false, false, false, true);
+  }
+  function handleUpcoming() {
+    setStartDate(todayDateRef.current);
+    setEndDate(tomorrowDateRef.current);
+    updateConcertDurationBTNs(true, false, false, false);
+  }
+
   return (
     <>
       <div className={Styles.backdrop}></div>
@@ -148,13 +215,25 @@ const Sidebarby = forwardRef(function (props, ref) {
             <div className={Styles.todayContainer}>
               <button
                 type="button"
-                className={`${Styles.upcoming} ${Styles.BTNs}`}
+                className={
+                  upcomingStatus
+                    ? ` ${Styles.BTNs} ${Styles.blue}`
+                    : ` ${Styles.BTNs}`
+                }
+                ref={upcomingInputRef}
+                onClick={handleUpcoming}
               >
                 All Upcoming
               </button>
               <button
                 type="button"
-                className={`${Styles.today} ${Styles.BTNs}`}
+                className={
+                  todayStatus
+                    ? `${Styles.BTNs} ${Styles.blue} `
+                    : `${Styles.BTNs}`
+                }
+                ref={todayBTNRef}
+                onClick={handleToday}
               >
                 Today
               </button>
@@ -162,13 +241,25 @@ const Sidebarby = forwardRef(function (props, ref) {
             <div className={Styles.tomorrowContainer}>
               <button
                 type="button"
-                className={`${Styles.tomorrow} ${Styles.BTNs}`}
+                className={
+                  tomorrowStatus
+                    ? ` ${Styles.BTNs} ${Styles.blue}`
+                    : ` ${Styles.BTNs}`
+                }
+                ref={tomorrowBTNRef}
+                onClick={handleTomorrow}
               >
                 Tomorrow
               </button>
               <button
                 type="button"
-                className={`${Styles.weekend} ${Styles.BTNs}`}
+                className={
+                  weekendStatus
+                    ? `${Styles.BTNs} ${Styles.blue}`
+                    : `${Styles.BTNs}`
+                }
+                ref={weekendBTNRef}
+                onClick={handleWeekend}
               >
                 This Weekend
               </button>
@@ -192,12 +283,16 @@ const Sidebarby = forwardRef(function (props, ref) {
             )}
           </button>
           <Duration
+            firstDate={startDate}
+            lastDate={endDate}
             customRangeClassName={
               concertDurationVisibility == "show"
                 ? Styles.dateContainer
                 : Styles.noVisibility
             }
             valueConcertDurationVisibility={concertDurationVisibility}
+            startDateRef={startDateInputRef}
+            endDateRef={endDateInputRef}
           />
         </div>
         <div className={Styles.whereContainer}>
