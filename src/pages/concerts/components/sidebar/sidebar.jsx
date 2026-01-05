@@ -8,19 +8,20 @@ import {
   Search,
 } from "lucide-react";
 import { useState, useEffect, useRef, forwardRef } from "react";
-import { openDialog, closeDialog } from "../../../../utilis/side bar/sidebar";
+import {
+  openDialog,
+  closeDialog,
+  displayModal,
+} from "../../../../utilis/side bar/sidebar";
 import debounce from "../../../../utilis/debounce/debounce";
-
-let focusableElements;
-const talk = "class";
+import getFocusableElements from "../../../../utilis/focusableElements/focusableelements";
 
 /* Deal with focusable Elements, place in an array*/
 function Duration({
   startDate = "2024-01-02",
   endDate = "2025-01-04",
-  startDateInputRef,
-  endDateInputRef,
   customRangeClassName,
+  valueConcertDurationVisibility,
 }) {
   return (
     <div className={customRangeClassName}>
@@ -34,7 +35,7 @@ function Duration({
           name="start_date"
           className={Styles.startDate}
           defaultValue={startDate}
-          ref={startDateInputRef}
+          disabled={(valueConcertDurationVisibility = "show" ? false : true)}
         />
       </div>
       <div className={Styles.endDateContainer}>
@@ -47,13 +48,16 @@ function Duration({
           name="end_date"
           className={Styles.endDate}
           defaultValue={endDate}
-          ref={endDateInputRef}
+          disabled={valueConcertDurationVisibility == "show" ? false : true}
         />
       </div>
     </div>
   );
 }
 const Sidebarby = forwardRef(function (props, ref) {
+  // Destructure from props
+  const { location = "South Africa", sideBarClassName } = props;
+
   const [windowSize, setWindowSize] = useState({
     width: window.innerWidth,
     height: window.innerHeight,
@@ -70,42 +74,8 @@ const Sidebarby = forwardRef(function (props, ref) {
   //Determine if the recent location searches are cleared
   const [clearLocation, setClearLocation] = useState(false);
 
-  const { location = "South Africa", showBTNRef, sideBarClassName } = props; // Destructure from props
-
-  //All the elements that must be within the tabindex when the side bar is open
-  const upcomingBTNRef = useRef(null);
-  const todayBTNRef = useRef(null);
-  const tommorrowBTNRef = useRef(null);
-  const weekendBTNRef = useRef(null);
-  const customRangeBTNRef = useRef(null);
-  const startBTNRef = useRef(null);
-  const endsBTNRef = useRef(null);
-  const clearBTNRef = useRef(null);
-  const nearMeBTNRef = useRef(null);
-  const firstCountryBTNRef = useRef(null);
-  const secondCountryBTNRef = useRef(null);
-  const thirdCountryRef = useRef(null);
-  const newLocationBTNRef = useRef(null);
   const searchInputBTNRef = useRef(null);
 
-  const allFocusableElements = [
-    showBTNRef,
-    upcomingBTNRef.current,
-    todayBTNRef.current,
-    tommorrowBTNRef.current,
-    weekendBTNRef.current,
-    customRangeBTNRef.current,
-    startBTNRef.current,
-    endsBTNRef.current,
-    clearBTNRef.current,
-    nearMeBTNRef.current,
-    firstCountryBTNRef.current,
-    secondCountryBTNRef.current,
-    thirdCountryRef.current,
-    newLocationBTNRef.current,
-    searchInputBTNRef.current,
-  ];
-  focusableElements = allFocusableElements;
   const greaterthan1024 = windowSize.width >= 1024; //Equal or greater than 768px viewport width return true
 
   useEffect(() => {
@@ -179,14 +149,12 @@ const Sidebarby = forwardRef(function (props, ref) {
               <button
                 type="button"
                 className={`${Styles.upcoming} ${Styles.BTNs}`}
-                ref={upcomingBTNRef}
               >
                 All Upcoming
               </button>
               <button
                 type="button"
                 className={`${Styles.today} ${Styles.BTNs}`}
-                ref={todayBTNRef}
               >
                 Today
               </button>
@@ -195,14 +163,12 @@ const Sidebarby = forwardRef(function (props, ref) {
               <button
                 type="button"
                 className={`${Styles.tomorrow} ${Styles.BTNs}`}
-                ref={tommorrowBTNRef}
               >
                 Tomorrow
               </button>
               <button
                 type="button"
                 className={`${Styles.weekend} ${Styles.BTNs}`}
-                ref={weekendBTNRef}
               >
                 This Weekend
               </button>
@@ -211,7 +177,6 @@ const Sidebarby = forwardRef(function (props, ref) {
           <button
             type="button"
             className={Styles.customRangeBTN}
-            ref={customRangeBTNRef}
             onClick={
               concertDurationVisibility == "hide"
                 ? handleShowCustomDurationVisibility
@@ -227,13 +192,12 @@ const Sidebarby = forwardRef(function (props, ref) {
             )}
           </button>
           <Duration
-            startDateInputRef={startBTNRef}
-            endDateInputRef={endsBTNRef}
             customRangeClassName={
               concertDurationVisibility == "show"
                 ? Styles.dateContainer
                 : Styles.noVisibility
             }
+            valueConcertDurationVisibility={concertDurationVisibility}
           />
         </div>
         <div className={Styles.whereContainer}>
@@ -248,7 +212,6 @@ const Sidebarby = forwardRef(function (props, ref) {
               <button
                 type="button"
                 className={Styles.clearBTN}
-                ref={clearBTNRef}
                 onClick={handleClearLocation}
               >
                 clear
@@ -260,7 +223,6 @@ const Sidebarby = forwardRef(function (props, ref) {
               <button
                 type="button"
                 className={`${Styles.nearMe} ${Styles.BTNs}`}
-                ref={nearMeBTNRef}
               >
                 Near Me
               </button>
@@ -271,7 +233,6 @@ const Sidebarby = forwardRef(function (props, ref) {
                     ? Styles.noVisibility
                     : `${Styles.usa} ${Styles.BTNs}`
                 }
-                ref={firstCountryBTNRef}
               >
                 USA
               </button>
@@ -284,14 +245,12 @@ const Sidebarby = forwardRef(function (props, ref) {
               <button
                 type="button"
                 className={`${Styles.australia} ${Styles.BTNs}`}
-                ref={secondCountryBTNRef}
               >
                 Australia
               </button>
               <button
                 type="button"
                 className={`${Styles.location} ${Styles.BTNs}`}
-                ref={thirdCountryRef}
               >
                 {location}
               </button>
@@ -300,7 +259,6 @@ const Sidebarby = forwardRef(function (props, ref) {
           <button
             type="button"
             className={Styles.newLocationBTN}
-            ref={newLocationBTNRef}
             onClick={
               locationSearchVisibility == "hide"
                 ? handleShowLocationSearch
@@ -328,6 +286,7 @@ const Sidebarby = forwardRef(function (props, ref) {
               name="country"
               className={Styles.countryInput}
               ref={searchInputBTNRef}
+              disabled={locationSearchVisibility == "show" ? false : true}
             />
           </div>
         </div>
@@ -341,11 +300,13 @@ export default function SidebarVisibility() {
     height: window.innerHeight,
   });
   const [visibleButton, setVisibleButton] = useState("show");
-  const [buttonRef, setButtonRef] = useState(false);
+  const sidebarContainerRef = useRef(null);
   const sidebarRef = useRef(null);
   const showBTNRef = useRef(null);
   const previousFocusedElement = useRef(null);
   const lessthan768 = windowSize.width <= 768; //Equal or less than 768px viewport width return true
+
+  //Track viewport width
   useEffect(() => {
     // Debounced resize handler
     const handleResize = debounce(() => {
@@ -369,29 +330,38 @@ export default function SidebarVisibility() {
     };
   }, []);
 
-  useEffect(() => {
-    setButtonRef(true);
-  }, []);
-
   const handleCloseModal = function () {
+    const sideBarContainerValue = sidebarContainerRef.current;
     const sideBarvalue = sidebarRef.current;
     closeDialog(
       sideBarvalue,
-      focusableElements,
+      getFocusableElements(sideBarContainerValue),
       previousFocusedElement.current,
     );
     setVisibleButton("show");
   };
+
   const handleOpenModal = function () {
-    console.log(sidebarRef.current);
     previousFocusedElement.current = document.activeElement;
     const sideBarvalue = sidebarRef.current;
-    openDialog(sideBarvalue, focusableElements);
+
+    openDialog(sideBarvalue);
     setVisibleButton("hide");
   };
 
+  //This will ensure that the focusable elements are collected after the show button is disabled and the hide button is visible
+  useEffect(() => {
+    const sideBarContainerValue = sidebarContainerRef.current;
+    if (visibleButton == "hide") {
+      displayModal(
+        sideBarContainerValue,
+        getFocusableElements(sideBarContainerValue),
+      );
+    }
+  }, [visibleButton]);
+
   return (
-    <>
+    <div ref={sidebarContainerRef}>
       <div
         className={lessthan768 ? Styles.noVisibility : Styles.filterConcerts}
       >
@@ -404,6 +374,7 @@ export default function SidebarVisibility() {
             }
             aria-label="Open the side bar"
             onClick={handleOpenModal}
+            disabled={visibleButton == "hide" ? true : false}
           >
             show
           </button>
@@ -420,8 +391,8 @@ export default function SidebarVisibility() {
           </button>
         </div>
       </div>
-      <Sidebarby ref={sidebarRef} showBTNRef={showBTNRef.current} />
-    </>
+      <Sidebarby ref={sidebarRef} />
+    </div>
   );
 }
 
