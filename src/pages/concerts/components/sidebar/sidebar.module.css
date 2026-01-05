@@ -203,6 +203,10 @@
 .show {
   display: block;
 }
+.blue {
+  background-color: #066bff;
+  color: #fff;
+}
 @media (min-width: 768px) {
   .backdrop {
     display: none;
