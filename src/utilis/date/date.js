@@ -7,9 +7,15 @@ function getTodayDate() {
 
 function getTomorrowDate() {
   const today = new Date();
+  const tomorrow = new Date(today); // Create a copy of today
   tomorrow.setDate(tomorrow.getDate() + 1);
-  const tomorrow = tomorrow.toISOString().split("T")[0]; // "2024-01-16"
-  return tomorrow;
+  return tomorrow.toISOString().split("T")[0]; // "2024-01-16"
+}
+function getDayAfterTomorrowDate() {
+  const today = new Date();
+  const dayAfterTomorrow = new Date(today); // Create a copy of today
+  dayAfterTomorrow.setDate(dayAfterTomorrow.getDate() + 2);
+  return dayAfterTomorrow.toISOString().split("T")[0]; // "2024-01-16"
 }
 function getThisWeekendDates() {
   const today = new Date();
@@ -41,3 +47,10 @@ function getThisWeekendDates() {
     end: sundayStr,
   };
 }
+
+export {
+  getTodayDate,
+  getTomorrowDate,
+  getDayAfterTomorrowDate,
+  getThisWeekendDates,
+};
