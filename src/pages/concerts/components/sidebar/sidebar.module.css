@@ -25,6 +25,11 @@
   border: none;
   width: 100%;
   top: 80px;
+
+  /* Make the side bar scrollable when it exceeds the viewport height */
+  overflow-y: auto;
+  scrollbar-width: thin;
+  max-height: 90vh;
 }
 .headingContainer,
 .clearContainer,
@@ -185,6 +190,7 @@
   display: none;
 }
 .backdrop {
+  overflow: hidden;
   display: block;
   position: absolute;
   top: 0;
