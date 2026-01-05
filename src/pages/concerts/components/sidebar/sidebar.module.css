@@ -192,7 +192,10 @@
   right: 0;
   left: 0;
   background-color: #eae8e8;
-  pointer-events: none; /*This will make the content behind the backdrop to be non-interactive */
+  pointer-events: auto; /*This will make the content behind the backdrop to be non-interactive */
+}
+.show {
+  display: block;
 }
 @media (min-width: 768px) {
   .backdrop {

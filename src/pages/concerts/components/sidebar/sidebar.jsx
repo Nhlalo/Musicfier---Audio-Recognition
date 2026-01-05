@@ -9,6 +9,7 @@ import {
 } from "lucide-react";
 import { useState, useEffect, useRef, forwardRef } from "react";
 import { openDialog, closeDialog } from "../../../../utilis/side bar/sidebar";
+import debounce from "../../../../utilis/debounce/debounce";
 
 let focusableElements;
 const talk = "class";
@@ -53,6 +54,11 @@ function Duration({
   );
 }
 const Sidebarby = forwardRef(function (props, ref) {
+  const [windowSize, setWindowSize] = useState({
+    width: window.innerWidth,
+    height: window.innerHeight,
+  });
+
   //Determine the visibility of the custom range concert duaration
   const [concertDurationVisibility, setConcertDurationVisibility] =
     useState("hide");
@@ -64,7 +70,7 @@ const Sidebarby = forwardRef(function (props, ref) {
   //Determine if the recent location searches are cleared
   const [clearLocation, setClearLocation] = useState(false);
 
-  const { location = "South Africa", showBTNRef } = props; // Destructure from props
+  const { location = "South Africa", showBTNRef, sideBarClassName } = props; // Destructure from props
 
   //All the elements that must be within the tabindex when the side bar is open
   const upcomingBTNRef = useRef(null);
@@ -100,6 +106,30 @@ const Sidebarby = forwardRef(function (props, ref) {
     searchInputBTNRef.current,
   ];
   focusableElements = allFocusableElements;
+  const greaterthan1024 = windowSize.width >= 1024; //Equal or greater than 768px viewport width return true
+
+  useEffect(() => {
+    // Debounced resize handler
+    const handleResize = debounce(() => {
+      setWindowSize({
+        width: window.innerWidth,
+        height: window.innerHeight,
+      });
+    }, 250);
+
+    window.addEventListener("resize", handleResize);
+
+    // Initial size
+    setWindowSize({
+      width: window.innerWidth,
+      height: window.innerHeight,
+    });
+
+    // Cleanup
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
 
   //Display the concert duration
   function handleShowCustomDurationVisibility() {
@@ -127,189 +157,221 @@ const Sidebarby = forwardRef(function (props, ref) {
   }
 
   return (
-    <dialog
-      className={`${Styles.filterConcerts} ${Styles.sidebarContainer}`}
-      ref={ref}
-    >
-      <div className={Styles.whenContainer}>
-        <span className={Styles.visuallyHidden}>
-          Select the date of the concerts
-        </span>
-        <h3 className={Styles.when} aria-hidden="true">
-          When?
-        </h3>
-        <div className={Styles.concertDate}>
-          <div className={Styles.todayContainer}>
-            <button
-              type="button"
-              className={`${Styles.upcoming} ${Styles.BTNs}`}
-              ref={upcomingBTNRef}
-            >
-              All Upcoming
-            </button>
-            <button
-              type="button"
-              className={`${Styles.today} ${Styles.BTNs}`}
-              ref={todayBTNRef}
-            >
-              Today
-            </button>
+    <>
+      <div className={Styles.backdrop}></div>
+      <dialog
+        className={
+          greaterthan1024
+            ? `${Styles.filterConcerts} ${Styles.sidebarContainer}`
+            : `${Styles.filterConcerts} ${Styles.sidebarContainer} ${Styles[sideBarClassName]}`
+        }
+        ref={ref}
+      >
+        <div className={Styles.whenContainer}>
+          <span className={Styles.visuallyHidden}>
+            Select the date of the concerts
+          </span>
+          <h3 className={Styles.when} aria-hidden="true">
+            When?
+          </h3>
+          <div className={Styles.concertDate}>
+            <div className={Styles.todayContainer}>
+              <button
+                type="button"
+                className={`${Styles.upcoming} ${Styles.BTNs}`}
+                ref={upcomingBTNRef}
+              >
+                All Upcoming
+              </button>
+              <button
+                type="button"
+                className={`${Styles.today} ${Styles.BTNs}`}
+                ref={todayBTNRef}
+              >
+                Today
+              </button>
+            </div>
+            <div className={Styles.tomorrowContainer}>
+              <button
+                type="button"
+                className={`${Styles.tomorrow} ${Styles.BTNs}`}
+                ref={tommorrowBTNRef}
+              >
+                Tomorrow
+              </button>
+              <button
+                type="button"
+                className={`${Styles.weekend} ${Styles.BTNs}`}
+                ref={weekendBTNRef}
+              >
+                This Weekend
+              </button>
+            </div>
           </div>
-          <div className={Styles.tomorrowContainer}>
-            <button
-              type="button"
-              className={`${Styles.tomorrow} ${Styles.BTNs}`}
-              ref={tommorrowBTNRef}
-            >
-              Tomorrow
-            </button>
-            <button
-              type="button"
-              className={`${Styles.weekend} ${Styles.BTNs}`}
-              ref={weekendBTNRef}
-            >
-              This Weekend
-            </button>
-          </div>
-        </div>
-        <button
-          type="button"
-          className={Styles.customRangeBTN}
-          ref={customRangeBTNRef}
-          onClick={
-            concertDurationVisibility == "hide"
-              ? handleShowCustomDurationVisibility
-              : handleHideCustomDurationVisibility
-          }
-        >
-          <Calendar aria-hidden="true" />{" "}
-          <span className={Styles.customRange}>Custom Range</span>{" "}
-          {concertDurationVisibility == "hide" ? (
-            <ChevronDown aria-hidden="true" />
-          ) : (
-            <ChevronUp aria-hidden="true" />
-          )}
-        </button>
-        <Duration
-          startDateInputRef={startBTNRef}
-          endDateInputRef={endsBTNRef}
-          customRangeClassName={
-            concertDurationVisibility == "show"
-              ? Styles.dateContainer
-              : Styles.noVisibility
-          }
-        />
-      </div>
-      <div className={Styles.whereContainer}>
-        <div>
-          <div className={Styles.clearContainer}>
-            <h3 className={Styles.visuallyHidden}>
-              Select the locatiion of the concerts
-            </h3>
-            <h3 className={Styles.where} aria-hidden="true">
-              Where?
-            </h3>
-            <button
-              type="button"
-              className={Styles.clearBTN}
-              ref={clearBTNRef}
-              onClick={handleClearLocation}
-            >
-              clear
-            </button>
-          </div>
-        </div>
-        <div className={Styles.concertLocationContainer}>
-          <div className={Styles.nearMeContainer}>
-            <button
-              type="button"
-              className={`${Styles.nearMe} ${Styles.BTNs}`}
-              ref={nearMeBTNRef}
-            >
-              Near Me
-            </button>
-            <button
-              type="button"
-              className={
-                clearLocation
-                  ? Styles.noVisibility
-                  : `${Styles.usa} ${Styles.BTNs}`
-              }
-              ref={firstCountryBTNRef}
-            >
-              USA
-            </button>
-          </div>
-          <div
-            className={
-              clearLocation ? Styles.noVisibility : Styles.locationContainer
+          <button
+            type="button"
+            className={Styles.customRangeBTN}
+            ref={customRangeBTNRef}
+            onClick={
+              concertDurationVisibility == "hide"
+                ? handleShowCustomDurationVisibility
+                : handleHideCustomDurationVisibility
             }
           >
-            <button
-              type="button"
-              className={`${Styles.australia} ${Styles.BTNs}`}
-              ref={secondCountryBTNRef}
-            >
-              Australia
-            </button>
-            <button
-              type="button"
-              className={`${Styles.location} ${Styles.BTNs}`}
-              ref={thirdCountryRef}
-            >
-              {location}
-            </button>
-          </div>
-        </div>
-        <button
-          type="button"
-          className={Styles.newLocationBTN}
-          ref={newLocationBTNRef}
-          onClick={
-            locationSearchVisibility == "hide"
-              ? handleShowLocationSearch
-              : handleHideLocationSearch
-          }
-        >
-          <MapPinCheck aria-hidden="true" />
-          <span className={Styles.newLocation}>New Location</span>{" "}
-          {locationSearchVisibility == "hide" ? (
-            <ChevronDown aria-hidden="true" />
-          ) : (
-            <ChevronUp aria-hidden="true" />
-          )}
-        </button>
-        <div
-          className={
-            locationSearchVisibility == "show"
-              ? Styles.countryInputContainer
-              : Styles.noVisibility
-          }
-        >
-          <Search className={Styles.searchIcon} />
-          <input
-            type="text"
-            name="country"
-            className={Styles.countryInput}
-            ref={searchInputBTNRef}
+            <Calendar aria-hidden="true" />{" "}
+            <span className={Styles.customRange}>Custom Range</span>{" "}
+            {concertDurationVisibility == "hide" ? (
+              <ChevronDown aria-hidden="true" />
+            ) : (
+              <ChevronUp aria-hidden="true" />
+            )}
+          </button>
+          <Duration
+            startDateInputRef={startBTNRef}
+            endDateInputRef={endsBTNRef}
+            customRangeClassName={
+              concertDurationVisibility == "show"
+                ? Styles.dateContainer
+                : Styles.noVisibility
+            }
           />
         </div>
-      </div>
-    </dialog>
+        <div className={Styles.whereContainer}>
+          <div>
+            <div className={Styles.clearContainer}>
+              <h3 className={Styles.visuallyHidden}>
+                Select the locatiion of the concerts
+              </h3>
+              <h3 className={Styles.where} aria-hidden="true">
+                Where?
+              </h3>
+              <button
+                type="button"
+                className={Styles.clearBTN}
+                ref={clearBTNRef}
+                onClick={handleClearLocation}
+              >
+                clear
+              </button>
+            </div>
+          </div>
+          <div className={Styles.concertLocationContainer}>
+            <div className={Styles.nearMeContainer}>
+              <button
+                type="button"
+                className={`${Styles.nearMe} ${Styles.BTNs}`}
+                ref={nearMeBTNRef}
+              >
+                Near Me
+              </button>
+              <button
+                type="button"
+                className={
+                  clearLocation
+                    ? Styles.noVisibility
+                    : `${Styles.usa} ${Styles.BTNs}`
+                }
+                ref={firstCountryBTNRef}
+              >
+                USA
+              </button>
+            </div>
+            <div
+              className={
+                clearLocation ? Styles.noVisibility : Styles.locationContainer
+              }
+            >
+              <button
+                type="button"
+                className={`${Styles.australia} ${Styles.BTNs}`}
+                ref={secondCountryBTNRef}
+              >
+                Australia
+              </button>
+              <button
+                type="button"
+                className={`${Styles.location} ${Styles.BTNs}`}
+                ref={thirdCountryRef}
+              >
+                {location}
+              </button>
+            </div>
+          </div>
+          <button
+            type="button"
+            className={Styles.newLocationBTN}
+            ref={newLocationBTNRef}
+            onClick={
+              locationSearchVisibility == "hide"
+                ? handleShowLocationSearch
+                : handleHideLocationSearch
+            }
+          >
+            <MapPinCheck aria-hidden="true" />
+            <span className={Styles.newLocation}>New Location</span>{" "}
+            {locationSearchVisibility == "hide" ? (
+              <ChevronDown aria-hidden="true" />
+            ) : (
+              <ChevronUp aria-hidden="true" />
+            )}
+          </button>
+          <div
+            className={
+              locationSearchVisibility == "show"
+                ? Styles.countryInputContainer
+                : Styles.noVisibility
+            }
+          >
+            <Search className={Styles.searchIcon} />
+            <input
+              type="text"
+              name="country"
+              className={Styles.countryInput}
+              ref={searchInputBTNRef}
+            />
+          </div>
+        </div>
+      </dialog>
+    </>
   );
 });
 export default function SidebarVisibility() {
+  const [windowSize, setWindowSize] = useState({
+    width: window.innerWidth,
+    height: window.innerHeight,
+  });
   const [visibleButton, setVisibleButton] = useState("show");
   const [buttonRef, setButtonRef] = useState(false);
   const sidebarRef = useRef(null);
   const showBTNRef = useRef(null);
   const previousFocusedElement = useRef(null);
-  const backdropRef = useRef(null);
+  const lessthan768 = windowSize.width <= 768; //Equal or less than 768px viewport width return true
+  useEffect(() => {
+    // Debounced resize handler
+    const handleResize = debounce(() => {
+      setWindowSize({
+        width: window.innerWidth,
+        height: window.innerHeight,
+      });
+    }, 250);
+
+    window.addEventListener("resize", handleResize);
+
+    // Initial size
+    setWindowSize({
+      width: window.innerWidth,
+      height: window.innerHeight,
+    });
+
+    // Cleanup
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
 
   useEffect(() => {
     setButtonRef(true);
   }, []);
-  console.log(showBTNRef.current);
 
   const handleCloseModal = function () {
     const sideBarvalue = sidebarRef.current;
@@ -331,12 +393,8 @@ export default function SidebarVisibility() {
   return (
     <>
       <div
-        className={
-          visibleButton == "hide" ? Styles.backdrop : Styles.noVisibility
-        }
-        ref={backdropRef}
-      ></div>
-      <div className={Styles.filterConcerts}>
+        className={lessthan768 ? Styles.noVisibility : Styles.filterConcerts}
+      >
         <div className={Styles.headingContainer}>
           <h2 className={Styles.heading}>Filter Concerts</h2>
           <button
@@ -366,3 +424,5 @@ export default function SidebarVisibility() {
     </>
   );
 }
+
+export { Sidebarby };

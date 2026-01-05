@@ -1,3 +1,22 @@
+.filterConcerts {
+  position: absolute;
+  top: 15px;
+  z-index: 2;
+  color: #000;
+  padding: 1rem 0;
+  width: 100%;
+  right: 0;
+  background-color: #eae8e8;
+}
+.headingContainer {
+  padding: 1.25rem 1rem;
+  display: flex;
+  justify-content: space-between;
+}
+.hideBTN {
+  color: #066bff;
+  font-size: 0.875rem;
+}
 .concertLink {
   padding: 20px 0 20px 20px;
   width: 100%;
@@ -112,11 +131,26 @@
 .artistConcertContainer {
   margin: 0;
 }
+.hidden {
+  display: none;
+}
+
 @media (min-width: 768px) {
+  .filterConcerts {
+    background-color: #e1eae7;
+    border-radius: 16px;
+    width: 325px;
+    right: 15px;
+  }
   .filter {
     display: inline;
   }
   .artistConcertContainer {
     margin: 0 10%;
+  }
+}
+@media (min-width: 1024px) {
+  .filterBTN {
+    display: none;
   }
 }
