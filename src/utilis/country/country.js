@@ -15,7 +15,6 @@ export default async function getLocation(location, signal) {
     const response = await fetch(url, { signal });
 
     const data = await response.json();
-    console.log(data.geonames);
     //Throw an error if the place does not exist within the Geonames database
     if (!data.geonames || data.geonames.length === 0) {
       throw new Error("No place found");

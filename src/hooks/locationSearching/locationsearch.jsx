@@ -28,7 +28,27 @@ function Error() {
     </div>
   );
 }
-export default function Data({ locationData }) {
+export default function Data({
+  locationData,
+  modifyConcertsLocation,
+  locationConcerts,
+}) {
+  function handleLocation(e) {
+    const location = locationConcerts;
+    const container = e.currentTarget.children[0];
+
+    const grandchild = container.children[0];
+    const content = grandchild.textContent;
+
+    if (locationConcerts.length == 4) {
+      location.pop();
+      location.push(content);
+      modifyConcertsLocation(location);
+    } else {
+      location.push(content);
+      modifyConcertsLocation(location);
+    }
+  }
   return (
     <div className={Styles.dataContainer}>
       <span className={Styles.visuallyHidden}>Results</span>
@@ -43,6 +63,7 @@ export default function Data({ locationData }) {
                 type="button"
                 className={Styles.locationBTN}
                 key={location.key}
+                onClick={handleLocation}
               >
                 <div className={Styles.locationContainer}>
                   <span className={Styles.locationCity}>{location.city}</span>
@@ -78,7 +99,6 @@ function useLocationSearch(characterChange) {
           throw new Error("No location");
         }
         if (!signal.aborted) {
-          console.log(value);
           setData(value);
           setError(false);
         }
@@ -102,11 +122,22 @@ function useLocationSearch(characterChange) {
   return { data, loading, error };
 }
 
-function Location({ characterChange }) {
+function Location({
+  characterChange,
+  modifyConcertsLocation,
+  locationConcerts,
+}) {
   const { data, loading, error } = useLocationSearch(characterChange);
 
   if (loading) return <Loading />;
   if (error) return <Error />;
-  if (data) return <Data locationData={data} />;
+  if (data)
+    return (
+      <Data
+        locationData={data}
+        modifyConcertsLocation={modifyConcertsLocation}
+        locationConcerts={locationConcerts}
+      />
+    );
 }
 export { Location };
