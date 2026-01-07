@@ -22,6 +22,7 @@ import {
   getThisWeekendDates,
 } from "../../../../utilis/date/date";
 import { Location } from "../../../../hooks/locationSearching/locationsearch";
+
 /* Deal with focusable Elements, place in an array*/
 function Duration({
   firstDate,
@@ -68,7 +69,7 @@ function Duration({
 }
 const Sidebarby = forwardRef(function (props, ref) {
   // Destructure from props
-  const { location = "South Africa", sideBarClassName } = props;
+  const { sideBarClassName } = props;
 
   const todayDateRef = useRef(getTodayDate());
   const tomorrowDateRef = useRef(getTomorrowDate());
@@ -83,6 +84,13 @@ const Sidebarby = forwardRef(function (props, ref) {
   const endDateInputRef = useRef(null);
 
   const upcomingInputRef = useRef(null);
+
+  const countryKeysRef = useRef([
+    crypto.randomUUID(),
+    crypto.randomUUID(),
+    crypto.randomUUID(),
+    crypto.randomUUID(),
+  ]);
 
   const [windowSize, setWindowSize] = useState({
     width: window.innerWidth,
@@ -114,6 +122,13 @@ const Sidebarby = forwardRef(function (props, ref) {
   //This will ensure  that the location searching state data, loading and error is displayed
   const [displayLocationData, setDisplayLocationData] = useState(false);
   const [inputChange, setInputChange] = useState("");
+
+  const [concertLocation, setConcertLocation] = useState([
+    "Near Me",
+    "USA",
+    "South Africa",
+    "Australia",
+  ]);
 
   const greaterthan1024 = windowSize.width >= 1024; //Equal or greater than 768px viewport width return true
 
@@ -196,6 +211,8 @@ const Sidebarby = forwardRef(function (props, ref) {
     setEndDate(tomorrowDateRef.current);
     updateConcertDurationBTNs(true, false, false, false);
   }
+
+  //Initiate the user's desired concert location
   const handleLocationSearch = debounce(() => {
     const inputValue = searchInputBTNRef.current.value;
 
@@ -207,6 +224,11 @@ const Sidebarby = forwardRef(function (props, ref) {
       setDisplayLocationData(false);
     }
   }, 250);
+
+  //Use callback to allow the child to modify the concert locations state
+  function passToChild(city) {
+    setConcertLocation(city);
+  }
 
   return (
     <>
@@ -330,41 +352,40 @@ const Sidebarby = forwardRef(function (props, ref) {
           </div>
           <div className={Styles.concertLocationContainer}>
             <div className={Styles.nearMeContainer}>
-              <button
-                type="button"
-                className={`${Styles.nearMe} ${Styles.BTNs}`}
-              >
-                Near Me
-              </button>
-              <button
-                type="button"
+              {concertLocation.slice(0, 2).map((value, index) => {
+                return (
+                  <button
+                    type="button"
+                    className={`${Styles.nearMe} ${Styles.BTNs}`}
+                    key={countryKeysRef.current[index]}
+                  >
+                    {value}
+                  </button>
+                );
+              })}
+            </div>
+            {/* Display the third and fourth location if the array consists of 3 or more locations */}
+            {concertLocation.length > 2 && (
+              <div
                 className={
-                  clearLocation
-                    ? Styles.noVisibility
-                    : `${Styles.usa} ${Styles.BTNs}`
+                  clearLocation ? Styles.noVisibility : Styles.locationContainer
                 }
               >
-                USA
-              </button>
-            </div>
-            <div
-              className={
-                clearLocation ? Styles.noVisibility : Styles.locationContainer
-              }
-            >
-              <button
-                type="button"
-                className={`${Styles.australia} ${Styles.BTNs}`}
-              >
-                Australia
-              </button>
-              <button
-                type="button"
-                className={`${Styles.location} ${Styles.BTNs}`}
-              >
-                {location}
-              </button>
-            </div>
+                {concertLocation.slice(2, 4).map((value, index) => {
+                  const keyIndex = index + 2;
+
+                  return (
+                    <button
+                      type="button"
+                      className={`${Styles.nearMe} ${Styles.BTNs}`}
+                      key={countryKeysRef.current[keyIndex]}
+                    >
+                      {value}
+                    </button>
+                  );
+                })}
+              </div>
+            )}
           </div>
           <button
             type="button"
@@ -400,7 +421,13 @@ const Sidebarby = forwardRef(function (props, ref) {
               onChange={handleLocationSearch}
             />
           </div>
-          {displayLocationData && <Location characterChange={inputChange} />}
+          {displayLocationData && (
+            <Location
+              characterChange={inputChange}
+              modifyConcertsLocation={passToChild}
+              locationConcerts={concertLocation}
+            />
+          )}
         </div>
       </dialog>
     </>

@@ -1,5 +1,5 @@
 import Styles from "./locationsearch.module.css";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { Search, LoaderCircle, ChevronRight } from "lucide-react";
 import getLocation from "../../utilis/country/country";
 
@@ -33,12 +33,13 @@ export default function Data({
   modifyConcertsLocation,
   locationConcerts,
 }) {
-  function handleLocation(e) {
-    const location = locationConcerts;
-    const container = e.currentTarget.children[0];
+  //Store the refs for all the city results
+  const cityRefs = useRef([]);
 
-    const grandchild = container.children[0];
-    const content = grandchild.textContent;
+  //This will modify the state for the concert cities that have been searched
+  function handleLocation(index) {
+    const location = locationConcerts;
+    const content = cityRefs.current[index].textContent; //This gets the content of the city
 
     if (locationConcerts.length == 4) {
       location.pop();
@@ -57,16 +58,21 @@ export default function Data({
       </span>
       <div className={Styles.dataWrapper}>
         {locationData.length &&
-          locationData.slice(1, 6).map((location) => {
+          locationData.slice(1, 6).map((location, index) => {
             return (
               <button
                 type="button"
                 className={Styles.locationBTN}
                 key={location.key}
-                onClick={handleLocation}
+                onClick={() => handleLocation(index)}
               >
                 <div className={Styles.locationContainer}>
-                  <span className={Styles.locationCity}>{location.city}</span>
+                  <span
+                    className={Styles.locationCity}
+                    ref={(el) => (cityRefs.current[index] = el)}
+                  >
+                    {location.city}
+                  </span>
                   <span className={Styles.locationCountry}>
                     {location.country}
                   </span>
