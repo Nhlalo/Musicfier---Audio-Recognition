@@ -20,12 +20,13 @@
   padding: 1rem 0;
   width: 100%;
   right: 0;
+  z-index: 15;
 }
 .sidebarContainer {
   border: none;
   width: 100%;
   top: 80px;
-
+  outline: 0;
   /* Make the side bar scrollable when it exceeds the viewport height */
   overflow-y: auto;
   scrollbar-width: thin;
