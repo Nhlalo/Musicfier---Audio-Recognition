@@ -105,9 +105,6 @@ const Sidebarby = forwardRef(function (props, ref) {
   const [locationSearchVisibility, setLocationSearchVisibility] =
     useState("hide");
 
-  //Determine if the recent location searches are cleared
-  const [clearLocation, setClearLocation] = useState(false);
-
   const [upcomingStatus, setUpcomingStatus] = useState(true);
 
   const [todayStatus, setTodayStatus] = useState(false);
@@ -180,7 +177,7 @@ const Sidebarby = forwardRef(function (props, ref) {
 
   //Clear the recent location search
   function handleClearLocation() {
-    setClearLocation(true);
+    setConcertLocation(["Near Me"]);
   }
 
   //This will which of four buttons is clicked
@@ -366,11 +363,7 @@ const Sidebarby = forwardRef(function (props, ref) {
             </div>
             {/* Display the third and fourth location if the array consists of 3 or more locations */}
             {concertLocation.length > 2 && (
-              <div
-                className={
-                  clearLocation ? Styles.noVisibility : Styles.locationContainer
-                }
-              >
+              <div className={Styles.locationContainer}>
                 {concertLocation.slice(2, 4).map((value, index) => {
                   const keyIndex = index + 2;
 
