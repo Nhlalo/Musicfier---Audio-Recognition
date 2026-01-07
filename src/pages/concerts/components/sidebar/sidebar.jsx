@@ -21,10 +21,7 @@ import {
   getDayAfterTomorrowDate,
   getThisWeekendDates,
 } from "../../../../utilis/date/date";
-
-console.log(getThisWeekendDates().end);
-const today = getTodayDate();
-const tomorrow = getTomorrowDate();
+import { Location } from "../../../../hooks/locationSearching/locationsearch";
 /* Deal with focusable Elements, place in an array*/
 function Duration({
   firstDate,
@@ -114,6 +111,10 @@ const Sidebarby = forwardRef(function (props, ref) {
   const [startDate, setStartDate] = useState(todayDateRef.current);
   const [endDate, setEndDate] = useState(tomorrowDateRef.current);
 
+  //This will ensure  that the location searching state data, loading and error is displayed
+  const [displayLocationData, setDisplayLocationData] = useState(false);
+  const [inputChange, setInputChange] = useState("");
+
   const greaterthan1024 = windowSize.width >= 1024; //Equal or greater than 768px viewport width return true
 
   useEffect(() => {
@@ -192,6 +193,17 @@ const Sidebarby = forwardRef(function (props, ref) {
     setEndDate(tomorrowDateRef.current);
     updateConcertDurationBTNs(true, false, false, false);
   }
+  const handleLocationSearch = debounce(() => {
+    const inputValue = searchInputBTNRef.current.value;
+
+    //Display if the input value is not empty or only contains one character or is only filled with white spaces
+    if (inputValue.trim().length > 1) {
+      setDisplayLocationData(true);
+      setInputChange(inputValue);
+    } else {
+      setDisplayLocationData(false);
+    }
+  }, 250);
 
   return (
     <>
@@ -382,8 +394,10 @@ const Sidebarby = forwardRef(function (props, ref) {
               className={Styles.countryInput}
               ref={searchInputBTNRef}
               disabled={locationSearchVisibility == "show" ? false : true}
+              onChange={handleLocationSearch}
             />
           </div>
+          {displayLocationData && <Location characterChange={inputChange} />}
         </div>
       </dialog>
     </>
