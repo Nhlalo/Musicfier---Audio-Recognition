@@ -62,40 +62,42 @@ export default function Data({ locationData }) {
   );
 }
 
-const locationSearch = new Promise((resolve, reject) => {
-  const location = [
-    { city: "Cape Town", country: "South Africa", key: crypto.randomUUID() },
-    { city: "Cape Town", country: "South Africa", key: crypto.randomUUID() },
-    { city: "Cape Town", country: "South Africa", key: crypto.randomUUID() },
-    { city: "Cape Town", country: "South Africa", key: crypto.randomUUID() },
-    { city: "Cape Town", country: "South Africa", key: crypto.randomUUID() },
-    { city: "Cape Town", country: "South Africa", key: crypto.randomUUID() },
-    { city: "Cape Town", country: "South Africa", key: crypto.randomUUID() },
-  ];
-  const locationNo = false;
-  if (location) {
-    setTimeout(() => {
-      resolve(location);
-    }, 1000);
-  } else {
-    setTimeout(() => {
-      reject(new Error("Geolocation not supported"));
-    }, 10000);
-  }
-});
-
 function useLocationSearch(characterChange) {
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   useEffect(() => {
-    locationSearch
+    /* Implement abort Controller*/
+    const abortController = new AbortController();
+    const signal = abortController.signal;
+
+    getLocation(characterChange, signal)
       .then((value) => {
-        console.log(value);
-        return setData(value);
+        // Check if request was cancelled
+        if (value === undefined) {
+          throw new Error("No location");
+        }
+        if (!signal.aborted) {
+          console.log(value);
+          setData(value);
+          setError(false);
+        }
       })
-      .catch((error) => setError(error))
-      .finally(() => setLoading(false));
+      .catch((error) => {
+        // Only set error if it wasn't an abort error
+        if (error.name !== "AbortError") {
+          setError(true);
+        }
+      })
+      .finally(() => {
+        if (!signal.aborted) {
+          setLoading(false);
+        }
+      });
+
+    return () => {
+      abortController.abort();
+    };
   }, [characterChange]);
   return { data, loading, error };
 }
