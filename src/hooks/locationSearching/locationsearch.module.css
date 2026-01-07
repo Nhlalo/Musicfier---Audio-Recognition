@@ -62,7 +62,22 @@
 .loaderCircleIcon {
   color: #2e2e30;
   margin: auto;
-  transform: rotate(150deg);
+  animation: spin 1s linear infinite;
+}
+
+/* This animation will make the loading wheel spin. It will also make it disappear and appear */
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.1;
+  }
+  100% {
+    transform: rotate(360deg);
+    opacity: 1;
+  }
 }
 .noResults {
   padding: 15px;
