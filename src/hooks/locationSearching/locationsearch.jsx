@@ -28,28 +28,24 @@ function Error() {
     </div>
   );
 }
-export default function Data({
-  locationData,
-  modifyConcertsLocation,
-  locationConcerts,
-}) {
-  //Store the refs for all the city results
-  const cityRefs = useRef([]);
+function Data({ locationData, modifyConcertsLocation, locationConcerts }) {
+  function handleLocation(event, index) {
+    // Get data from the button's data attribute
+    const button = event.currentTarget;
+    const city = button.dataset.city;
+    const country = button.dataset.country;
+    const fullContent = `${city}, ${country}`;
 
-  //This will modify the state for the concert cities that have been searched
-  function handleLocation(index) {
-    const location = locationConcerts;
-    const content = cityRefs.current[index].textContent; //This gets the content of the city
+    const updatedLocations = [...locationConcerts];
 
-    if (locationConcerts.length == 4) {
-      location.pop();
-      location.push(content);
-      modifyConcertsLocation(location);
-    } else {
-      location.push(content);
-      modifyConcertsLocation(location);
+    if (updatedLocations.length >= 4) {
+      updatedLocations.pop();
     }
+
+    updatedLocations.push(fullContent);
+    modifyConcertsLocation(updatedLocations);
   }
+
   return (
     <div className={Styles.dataContainer}>
       <span className={Styles.visuallyHidden}>Results</span>
@@ -64,15 +60,12 @@ export default function Data({
                 type="button"
                 className={Styles.locationBTN}
                 key={location.key}
-                onClick={() => handleLocation(index)}
+                onClick={(e) => handleLocation(e, index)}
+                data-city={location.city}
+                data-country={location.country}
               >
                 <div className={Styles.locationContainer}>
-                  <span
-                    className={Styles.locationCity}
-                    ref={(el) => (cityRefs.current[index] = el)}
-                  >
-                    {location.city}
-                  </span>
+                  <span className={Styles.locationCity}>{location.city}</span>
                   <span className={Styles.locationCountry}>
                     {location.country}
                   </span>
@@ -88,7 +81,6 @@ export default function Data({
     </div>
   );
 }
-
 function useLocationSearch(characterChange) {
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
