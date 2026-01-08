@@ -1,3 +1,7 @@
+:root {
+  --mapContainer-height: calc(100vh - 74px);
+  --allConcertWrapper-height: 100%;
+}
 .filterConcerts {
   position: absolute;
   top: 15px;
@@ -67,6 +71,8 @@
   padding: 20px;
   background-color: #fff;
   width: 100%;
+  display: flex;
+  flex-direction: column;
 }
 .concertCountry,
 .allConcertsDescr {
@@ -135,6 +141,45 @@
   display: none;
 }
 
+.logoImg {
+  width: 100%;
+  height: 100%;
+}
+.allConcertsWrapper {
+  height: var(--allConcertWrapper-height);
+}
+.switchBTNsContainer {
+  position: fixed;
+  bottom: 35px;
+  background-color: #fff;
+  padding: 2px;
+  z-index: 20;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 4px;
+}
+.switchBTNsContainer,
+.switchBTN {
+  border-radius: 999px;
+}
+.switchBTN {
+  width: 48px;
+  height: 28px;
+  background-color: transparent;
+}
+.mapIcon,
+.toggleIcon {
+  color: #066bff;
+  width: 18px;
+  height: 18px;
+}
+.blueBG {
+  background-color: #066bff;
+}
+.colorWhite {
+  color: #fff;
+}
 @media (min-width: 768px) {
   .filterConcerts {
     background-color: #e1eae7;
@@ -145,12 +190,35 @@
   .filter {
     display: inline;
   }
-  .artistConcertContainer {
+  .allConcertsWrapper {
     margin: 0 10%;
   }
 }
 @media (min-width: 1024px) {
+  :root {
+    --mapContainer-height: calc(100vh - 74px);
+    --allConcertWrapper-height: calc(100vh - 74px);
+  }
+  .allConcertsContainer {
+    flex-direction: row;
+    padding-right: 0;
+  }
   .filterBTN {
     display: none;
+  }
+  .allConcertsWrapper {
+    width: 400px;
+    background-color: red;
+    overflow-y: scroll;
+    height: var(--allConcertWrapper-height);
+    margin: 0;
+  }
+  .mapContainer {
+    flex-grow: 1;
+    height: var(--mapContainer-height);
+    overflow: hidden;
+  }
+  .artistConcertContainer {
+    margin: 0;
   }
 }
