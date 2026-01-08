@@ -31,8 +31,15 @@
   overflow-y: auto;
   scrollbar-width: thin;
   max-height: 90vh;
+  /* Hide the scroll bar */
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE 10+ */
 }
-.headingContainer,
+/* Chrome, Safari, Edge */
+.element::-webkit-scrollbar {
+  display: none; /* This will hide the scroll bar */
+}
+.sidebarContainer .headingContainer,
 .clearContainer,
 .endDate,
 .startDate {
