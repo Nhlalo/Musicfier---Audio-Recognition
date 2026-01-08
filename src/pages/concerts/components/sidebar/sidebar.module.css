@@ -246,3 +246,8 @@
     margin-top: 16px;
   }
 }
+@media (min-width: 1024px) {
+  .headingContainer {
+    display: flex;
+  }
+}
