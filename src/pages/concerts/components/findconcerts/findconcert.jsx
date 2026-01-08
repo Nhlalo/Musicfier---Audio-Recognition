@@ -1,10 +1,12 @@
 import Styles from "./findconcert.module.css";
-import { Calendar, Rows3, X } from "lucide-react";
+import { Calendar, Rows3, X, Map, ListCollapse } from "lucide-react";
 import artistImg from "../../../../assets/artistImg.jpg";
 import SidebarVisibility from "../sidebar/sidebar";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, forwardRef } from "react";
 import debounce from "../../../../utilis/debounce/debounce";
 import { Sidebarby } from "../sidebar/sidebar";
+import getFocusableElements from "../../../../utilis/focusableElements/focusableelements";
+import { displayModal } from "../../../../utilis/side bar/sidebar";
 
 //Custom hook that will make the body not be scrollable if the side bar is open
 function useBodyScrollLock(isButtonPressed) {
@@ -21,12 +23,14 @@ function useBodyScrollLock(isButtonPressed) {
   }, [isButtonPressed]);
 }
 
-function FilterSidebarHeader({ showSidebar, sideBarVisible }) {
+const FilterSidebarHeader = forwardRef(function (props, ref) {
+  const { showSidebar, sideBarVisible } = props;
+
   function handleCloseModal() {
     showSidebar(false);
   }
   return (
-    <>
+    <div ref={ref}>
       <div className={sideBarVisible ? Styles.filterConcerts : Styles.hidden}>
         <div className={Styles.headingContainer}>
           <h2 className={Styles.heading}>Filter Concerts</h2>
@@ -41,10 +45,10 @@ function FilterSidebarHeader({ showSidebar, sideBarVisible }) {
         </div>
       </div>
       {/* This will make the side bar be visible when the filter button is pressed */}
-      <Sidebarby sideBarClassName="show" />
-    </>
+      <Sidebarby sideBarClassName="show" ref={ref} />
+    </div>
   );
-}
+});
 
 function ArtistConcert({
   artist = "Drake",
@@ -83,10 +87,16 @@ export default function Concerts() {
   //This will aid in the tracking of the visibility of the concert filter side bar
   const [filterVisibility, setFilterVisibility] = useState(false);
 
+  const [mapVisibility, setMapVisibility] = useState(false);
+  const [concertInforVisibility, setConcertInforVisibility] = useState(true);
+
   const [windowSize, setWindowSize] = useState({
     width: window.innerWidth,
     height: window.innerHeight,
   });
+
+  const sidebarRef = useRef(null);
+  const previousFocusedElement = useRef(null);
 
   useBodyScrollLock(filterVisibility);
 
@@ -100,7 +110,6 @@ export default function Concerts() {
       /* If the user initial display the filter at a viewport less than 1024px(laptop) and expands the view port than decreases the viewport the viewport should be clear & clean thus making the filter disappear */
       if (windowSize.width >= 1024) {
         setFilterVisibility(false);
-        console.log("The Boy");
       }
     }, 250);
 
@@ -120,25 +129,33 @@ export default function Concerts() {
   //Will display the concert filter side bar when the filter button is pressed
   function handleShowFilter() {
     setFilterVisibility(true);
+
+    //Trap Focus
+    previousFocusedElement.current = document.activeElement;
   }
+  useEffect(() => {
+    if (filterVisibility) {
+      const sideBarvalue = sidebarRef.current;
+      console.log(getFocusableElements(sideBarvalue));
+      displayModal(sideBarvalue, getFocusableElements(sideBarvalue));
+    }
+  }, [filterVisibility]);
   // This will pass the setFilterVisibility function to the sideBarFilter, so that it can be able to close the sidebar
   function passDataToChild(showSidebar) {
     setFilterVisibility(showSidebar);
   }
 
-  const sidebarRef = useRef(null);
+  function handleToggle() {
+    setConcertInforVisibility(true);
+    setMapVisibility(false);
+  }
+  function handleMap() {
+    setConcertInforVisibility(false);
+    setMapVisibility(true);
+  }
+
   return (
     <section className={Styles.allConcertsContainer}>
-      {/* This will make the side bar be visible when the filter button is pressed */}
-      {filterVisibility && (
-        <FilterSidebarHeader
-          showSidebar={passDataToChild}
-          sideBarVisible={filterVisibility}
-        />
-      )}
-      {/* This will automatically display the concert filter side bar when the viewport width is greater or equal to 1024px */}
-      {windowSize.width >= 1024 && <SidebarVisibility />}
-
       <div className={Styles.allConcertsWrapper}>
         <h1 className={Styles.concertCountry}>
           Concerts in <span className={Styles.country}>South Africa</span>{" "}
@@ -184,8 +201,60 @@ export default function Concerts() {
           <ArtistConcert />
           <ArtistConcert />
           <ArtistConcert />
-          <ArtistConcert />
         </div>
+      </div>
+      <div className={Styles.mapContainer}>
+        {/* This will make the side bar be visible when the filter button is pressed */}
+        {filterVisibility && (
+          <FilterSidebarHeader
+            ref={sidebarRef}
+            showSidebar={passDataToChild}
+            sideBarVisible={filterVisibility}
+          />
+        )}
+        {/* This will automatically display the concert filter side bar when the viewport width is greater or equal to 1024px */}
+        {windowSize.width >= 1024 && <SidebarVisibility />}
+        <img src={artistImg} alt="artist Img" className={Styles.logoImg} />
+      </div>
+      <div className={Styles.switchBTNsContainer}>
+        <button
+          type="button"
+          aria-label="View the map for the concerts location"
+          className={
+            concertInforVisibility
+              ? `${Styles.switchBTN} ${Styles.blueBG}`
+              : `${Styles.switchBTN}`
+          }
+          onClick={handleToggle}
+        >
+          <ListCollapse
+            aria-hidden="true"
+            className={
+              concertInforVisibility
+                ? `${Styles.toggleIcon} ${Styles.colorWhite}`
+                : `${Styles.toggleIcon}`
+            }
+          />
+        </button>
+        <button
+          type="button"
+          aria-label="View the list of concerts"
+          className={
+            mapVisibility
+              ? `${Styles.switchBTN} ${Styles.blueBG}`
+              : `${Styles.switchBTN}`
+          }
+          onClick={handleMap}
+        >
+          <Map
+            aria-hidden="true"
+            className={
+              mapVisibility
+                ? `${Styles.mapIcon} ${Styles.colorWhite}`
+                : `${Styles.mapIcon}`
+            }
+          />
+        </button>
       </div>
     </section>
   );
