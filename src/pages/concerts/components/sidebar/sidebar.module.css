@@ -25,12 +25,12 @@
 .sidebarContainer {
   border: none;
   width: 100%;
-  top: 115px;
+  top: 110px;
   outline: 0;
   /* Make the side bar scrollable when it exceeds the viewport height */
   overflow-y: auto;
   scrollbar-width: thin;
-  max-height: 90vh;
+  max-height: 80vh;
   /* Hide the scroll bar */
   scrollbar-width: none; /* Firefox */
   -ms-overflow-style: none; /* IE 10+ */
@@ -168,6 +168,9 @@
 .endDate {
   margin-top: 16px;
 }
+.heading {
+  font-size: 1.125rem;
+}
 .countryInputContainer {
   margin-top: 16px;
   position: relative;
@@ -215,6 +218,10 @@
   background-color: #066bff;
   color: #fff;
 }
+.headingContainer {
+  padding: 0.2rem 1rem;
+  align-items: center;
+}
 @media (min-width: 768px) {
   .backdrop {
     display: none;
@@ -230,7 +237,7 @@
     background-color: #edf2f4;
   }
   .sidebarContainer {
-    top: 150px;
+    top: 120px;
     margin-right: 0;
     width: 325px;
     height: auto;
@@ -254,6 +261,6 @@
     top: 80px;
   }
   .sidebarContainer {
-    top: 155px;
+    top: 120px;
   }
 }
