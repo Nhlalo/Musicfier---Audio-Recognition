@@ -1,6 +1,7 @@
 import Styles from "./chartheader.module.css";
 import artistImg from "../../../../assets/artistImg.jpg";
 import { ChevronDown } from "lucide-react";
+import { useState } from "react";
 
 //Generate keys for the chart buttons
 const chartTypeKeys = [
@@ -17,7 +18,37 @@ const imgKeys = Array.from({ length: 2 }, (_, index) => ({
 }));
 export default function ChartHeader() {
   const imageSrc = [artistImg, artistImg];
-  const chartTypes = ["Top 20", "Viral", "Discovery", "Genres"];
+  const chartTypes = ["Top 50", "Viral", "Discovery", "Genres"];
+
+  //Track if the button is clicked or no
+  const [buttonClickStatus, setButtonClickStatus] = useState({
+    "Top 50": true,
+    Viral: false,
+    Discovery: false,
+    Genres: false,
+  });
+
+  function changeBTNStatus(top50, viral, discovery, genres) {
+    setButtonClickStatus({
+      "Top 50": top50,
+      Viral: viral,
+      Discovery: discovery,
+      Genres: genres,
+    });
+  }
+
+  const handleChartTypeClick = (e) => {
+    const item = e.currentTarget.dataset.item;
+    if (item === "Top 50") {
+      changeBTNStatus(true, false, false, false);
+    } else if (item === "Viral") {
+      changeBTNStatus(false, true, false, false);
+    } else if (item === "Discovery") {
+      changeBTNStatus(false, false, true, false);
+    } else {
+      changeBTNStatus(false, false, false, true);
+    }
+  };
   return (
     <section className={Styles.chartHeaderContainer}>
       <div className={Styles.chartHeaderWrapper}>
@@ -43,7 +74,13 @@ export default function ChartHeader() {
               return (
                 <button
                   key={chartTypeKeys[index]}
-                  className={Styles.chartTypeBTNs}
+                  className={
+                    buttonClickStatus[value]
+                      ? `${Styles.chartTypeBTNs} ${Styles.buttonClick}`
+                      : `${Styles.chartTypeBTNs}`
+                  }
+                  data-item={value}
+                  onClick={handleChartTypeClick}
                 >
                   {value === "Genres" ? (
                     <>
@@ -63,7 +100,14 @@ export default function ChartHeader() {
         </div>
         <div className={Styles.imageContainer}>
           {imageSrc.map((value, index) => {
-            return <img src={value} alt="Artist" key={imgKeys[index]} />;
+            return (
+              <img
+                src={value}
+                alt="Artist"
+                key={imgKeys[index]}
+                className={Styles.sideImage}
+              />
+            );
           })}
         </div>
       </div>
