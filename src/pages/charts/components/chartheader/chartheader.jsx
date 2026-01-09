@@ -2,6 +2,7 @@ import Styles from "./chartheader.module.css";
 import artistImg from "../../../../assets/artistImg.jpg";
 import { ChevronDown } from "lucide-react";
 
+//Generate keys for the chart buttons
 const chartTypeKeys = [
   crypto.randomUUID(),
   crypto.randomUUID(),
@@ -9,7 +10,13 @@ const chartTypeKeys = [
   crypto.randomUUID(),
 ];
 
+//Generate keys for the images
+const imgKeys = Array.from({ length: 2 }, (_, index) => ({
+  id: crypto.randomUUID(),
+  content: `Item ${index + 1}`,
+}));
 export default function ChartHeader() {
+  const imageSrc = [artistImg, artistImg];
   const chartTypes = ["Top 20", "Viral", "Discovery", "Genres"];
   return (
     <section className={Styles.chartHeaderContainer}>
@@ -53,6 +60,11 @@ export default function ChartHeader() {
               );
             })}
           </div>
+        </div>
+        <div className={Styles.imageContainer}>
+          {imageSrc.map((value, index) => {
+            return <img src={value} alt="Artist" key={imgKeys[index]} />;
+          })}
         </div>
       </div>
     </section>
