@@ -5,7 +5,6 @@ import { ChevronDown } from "lucide-react";
 import { forwardRef, useEffect, useState, useRef } from "react";
 import Select from "react-select";
 import getAllCountries from "../../../../utilis/countryname/countryname";
-
 //Generate keys for the chart buttons
 const chartTypeKeys = [
   crypto.randomUUID(),
@@ -21,11 +20,12 @@ const genreKeys = Array.from({ length: 2 }, (_, index) => crypto.randomUUID());
 
 function Genres() {
   const genres = ["Dance", "Hip-Hip/Rap", "Pop"];
+
   return (
     <>
       <div className={Styles.genresContainer}>
         {genres.map((value, index) => (
-          <button className={Styles.genreBTN} key={index}>
+          <button className={Styles.genreBTN} key={genreKeys[index]}>
             {value}
           </button>
         ))}
@@ -62,6 +62,14 @@ export default function ChartHeader() {
     Genres: false,
   });
 
+  const sectionBG = buttonClickStatus["Top 50"]
+    ? `${Styles.chartHeaderContainer}`
+    : buttonClickStatus.Discovery
+      ? `${Styles.chartHeaderContainer} ${Styles.brownBG}`
+      : buttonClickStatus.Viral
+        ? `${Styles.chartHeaderContainer} ${Styles.blueBG}`
+        : `${Styles.chartHeaderContainer} `;
+
   function changeBTNStatus(top50, viral, discovery, genres) {
     setButtonClickStatus({
       "Top 50": top50,
@@ -84,7 +92,7 @@ export default function ChartHeader() {
     }
   };
   return (
-    <section className={Styles.chartHeaderContainer}>
+    <section className={sectionBG}>
       <div className={Styles.chartHeaderWrapper}>
         <div className={Styles.countryBTNContainer}>
           <CountrySelect classname={Styles.countryBTN} classPrefix="country" />
@@ -127,7 +135,18 @@ export default function ChartHeader() {
             {buttonClickStatus.Genres && <Genres />}
           </div>
         </div>
-        <div className={Styles.imageContainer} aria-hidden="true">
+        <div
+          className={
+            buttonClickStatus["Top 50"]
+              ? Styles.imageContainer
+              : buttonClickStatus.Viral
+                ? Styles.imageContainerViral
+                : buttonClickStatus.Discovery
+                  ? Styles.imageContainerDiscovery
+                  : Styles.imageContainer
+          }
+          aria-hidden="true"
+        >
           {imageSrc.map((value, index) => {
             return (
               <img
