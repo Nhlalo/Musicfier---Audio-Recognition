@@ -1,7 +1,10 @@
 import Styles from "./chartheader.module.css";
+import "./chartheader.css";
 import artistImg from "../../../../assets/artistImg.jpg";
 import { ChevronDown } from "lucide-react";
-import { useState } from "react";
+import { forwardRef, useEffect, useState, useRef } from "react";
+import Select from "react-select";
+import getAllCountries from "../../../../utilis/countryname/countryname";
 
 //Generate keys for the chart buttons
 const chartTypeKeys = [
@@ -12,10 +15,41 @@ const chartTypeKeys = [
 ];
 
 //Generate keys for the images
-const imgKeys = Array.from({ length: 2 }, (_, index) => ({
-  id: crypto.randomUUID(),
-  content: `Item ${index + 1}`,
-}));
+const imgKeys = Array.from({ length: 2 }, (_, index) => crypto.randomUUID());
+//Generate keys for the  genre buttons
+const genreKeys = Array.from({ length: 2 }, (_, index) => crypto.randomUUID());
+
+function Genres() {
+  const genres = ["Dance", "Hip-Hip/Rap", "Pop"];
+  return (
+    <>
+      <div className={Styles.genresContainer}>
+        {genres.map((value, index) => (
+          <button className={Styles.genreBTN} key={index}>
+            {value}
+          </button>
+        ))}
+      </div>
+    </>
+  );
+}
+
+function CountrySelect({ location = "South Africa", classname, classPrefix }) {
+  const [selected, setSelected] = useState(null);
+
+  return (
+    <Select
+      options={getAllCountries()}
+      value={selected}
+      placeholder={location}
+      onChange={setSelected}
+      isSearchable={true} // ✅ Control open state
+      className={classname}
+      classNamePrefix={classPrefix}
+    />
+  );
+}
+
 export default function ChartHeader() {
   const imageSrc = [artistImg, artistImg];
   const chartTypes = ["Top 50", "Viral", "Discovery", "Genres"];
@@ -53,13 +87,7 @@ export default function ChartHeader() {
     <section className={Styles.chartHeaderContainer}>
       <div className={Styles.chartHeaderWrapper}>
         <div className={Styles.countryBTNContainer}>
-          <button
-            className={Styles.countryBTN}
-            aria-label="Select the country in which you want to view its chart"
-          >
-            South Africa{" "}
-            <ChevronDown aria-hidden="true" className={Styles.chevronIcon} />
-          </button>
+          <CountrySelect classname={Styles.countryBTN} classPrefix="country" />
         </div>
         <div className={Styles.chartContainer}>
           <div className={Styles.inforContainer}>
@@ -96,9 +124,10 @@ export default function ChartHeader() {
                 </button>
               );
             })}
+            {buttonClickStatus.Genres && <Genres />}
           </div>
         </div>
-        <div className={Styles.imageContainer}>
+        <div className={Styles.imageContainer} aria-hidden="true">
           {imageSrc.map((value, index) => {
             return (
               <img
@@ -106,6 +135,7 @@ export default function ChartHeader() {
                 alt="Artist"
                 key={imgKeys[index]}
                 className={Styles.sideImage}
+                tabIndex="-1"
               />
             );
           })}
