@@ -5,6 +5,7 @@ import { ChevronDown } from "lucide-react";
 import { forwardRef, useEffect, useState, useRef } from "react";
 import Select from "react-select";
 import getAllCountries from "../../../../utilis/countryname/countryname";
+import Header from "../../../../components/layout/header/header";
 //Generate keys for the chart buttons
 const chartTypeKeys = [
   crypto.randomUUID(),
@@ -70,6 +71,14 @@ export default function ChartHeader() {
         ? `${Styles.chartHeaderContainer} ${Styles.blueBG}`
         : `${Styles.chartHeaderContainer} `;
 
+  const headerBG = buttonClickStatus["Top 50"]
+    ? "#000"
+    : buttonClickStatus.Discovery
+      ? "rgb(91, 81, 58)"
+      : buttonClickStatus.Viral
+        ? "rgb(43, 122, 144)"
+        : "#000";
+
   function changeBTNStatus(top50, viral, discovery, genres) {
     setButtonClickStatus({
       "Top 50": top50,
@@ -92,74 +101,87 @@ export default function ChartHeader() {
     }
   };
   return (
-    <section className={sectionBG}>
-      <div className={Styles.chartHeaderWrapper}>
-        <div className={Styles.countryBTNContainer}>
-          <CountrySelect classname={Styles.countryBTN} classPrefix="country" />
-        </div>
-        <div className={Styles.chartContainer}>
-          <div className={Styles.inforContainer}>
-            <span className={Styles.country}>South Africa</span>
-            <span className={Styles.chartName}>Top 200</span>
-            <span className={Styles.chartDescr}>
-              The top songs in South Africa this week
-            </span>
+    <>
+      <Header
+        bg1={headerBG}
+        bg2={headerBG}
+        color1="#fff"
+        color2="#fff"
+        logoBG1=" rgba(255, 255, 255, 0.3)"
+        logoBG2=" rgba(255, 255, 255, 0.3)"
+      />
+      <section className={sectionBG}>
+        <div className={Styles.chartHeaderWrapper}>
+          <div className={Styles.countryBTNContainer}>
+            <CountrySelect
+              classname={Styles.countryBTN}
+              classPrefix="country"
+            />
           </div>
-          <div className={Styles.buttonContainer}>
-            {chartTypes.map((value, index) => {
+          <div className={Styles.chartContainer}>
+            <div className={Styles.inforContainer}>
+              <span className={Styles.country}>South Africa</span>
+              <span className={Styles.chartName}>Top 200</span>
+              <span className={Styles.chartDescr}>
+                The top songs in South Africa this week
+              </span>
+            </div>
+            <div className={Styles.buttonContainer}>
+              {chartTypes.map((value, index) => {
+                return (
+                  <button
+                    key={chartTypeKeys[index]}
+                    className={
+                      buttonClickStatus[value]
+                        ? `${Styles.chartTypeBTNs} ${Styles.buttonClick}`
+                        : `${Styles.chartTypeBTNs}`
+                    }
+                    data-item={value}
+                    onClick={handleChartTypeClick}
+                  >
+                    {value === "Genres" ? (
+                      <>
+                        {value}
+                        <ChevronDown
+                          className={Styles.chevronIcon}
+                          aria-hidden="true"
+                        />
+                      </>
+                    ) : (
+                      value
+                    )}
+                  </button>
+                );
+              })}
+              {buttonClickStatus.Genres && <Genres />}
+            </div>
+          </div>
+          <div
+            className={
+              buttonClickStatus["Top 50"]
+                ? Styles.imageContainer
+                : buttonClickStatus.Viral
+                  ? Styles.imageContainerViral
+                  : buttonClickStatus.Discovery
+                    ? Styles.imageContainerDiscovery
+                    : Styles.imageContainer
+            }
+            aria-hidden="true"
+          >
+            {imageSrc.map((value, index) => {
               return (
-                <button
-                  key={chartTypeKeys[index]}
-                  className={
-                    buttonClickStatus[value]
-                      ? `${Styles.chartTypeBTNs} ${Styles.buttonClick}`
-                      : `${Styles.chartTypeBTNs}`
-                  }
-                  data-item={value}
-                  onClick={handleChartTypeClick}
-                >
-                  {value === "Genres" ? (
-                    <>
-                      {value}
-                      <ChevronDown
-                        className={Styles.chevronIcon}
-                        aria-hidden="true"
-                      />
-                    </>
-                  ) : (
-                    value
-                  )}
-                </button>
+                <img
+                  src={value}
+                  alt="Artist"
+                  key={imgKeys[index]}
+                  className={Styles.sideImage}
+                  tabIndex="-1"
+                />
               );
             })}
-            {buttonClickStatus.Genres && <Genres />}
           </div>
         </div>
-        <div
-          className={
-            buttonClickStatus["Top 50"]
-              ? Styles.imageContainer
-              : buttonClickStatus.Viral
-                ? Styles.imageContainerViral
-                : buttonClickStatus.Discovery
-                  ? Styles.imageContainerDiscovery
-                  : Styles.imageContainer
-          }
-          aria-hidden="true"
-        >
-          {imageSrc.map((value, index) => {
-            return (
-              <img
-                src={value}
-                alt="Artist"
-                key={imgKeys[index]}
-                className={Styles.sideImage}
-                tabIndex="-1"
-              />
-            );
-          })}
-        </div>
-      </div>
-    </section>
+      </section>
+    </>
   );
 }
