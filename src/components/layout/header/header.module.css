@@ -65,12 +65,14 @@
   min-width: 9ch;
   text-align: center;
 }
-
+.dropdownBTN {
+  background: transparent;
+}
 .dropdownMenu {
   min-width: 24px;
 }
 @media (min-width: 1024px) {
-  .dropdownMenu {
+  .dropdownBTN {
     display: none;
   }
   .navContainer {
