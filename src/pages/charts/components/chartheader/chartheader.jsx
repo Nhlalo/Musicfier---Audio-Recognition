@@ -107,6 +107,7 @@ export default function ChartHeader() {
         bg1={headerBG}
         color1="#fff"
         logoBG1=" rgba(255, 255, 255, 0.3)"
+        btnBG2="#000"
       />
       <section className={sectionBG}>
         <div className={Styles.chartHeaderWrapper}>
