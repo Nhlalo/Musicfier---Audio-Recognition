@@ -162,7 +162,7 @@ function MusicVideo({
   );
 }
 
-export default function Chart(BG) {
+export default function Chart({ BG = "rgb(89, 82, 63)" }) {
   return (
     <section className={Styles.chartContainer}>
       <div className={Styles.chartWrapper}>
