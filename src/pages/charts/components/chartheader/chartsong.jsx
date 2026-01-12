@@ -46,10 +46,59 @@ function ChartSong({
 }
 
 function ChartSongContainer() {
-  return <ul className={Styles.chartSongContainer}></ul>;
+  return (
+    <ul className={Styles.chartSongContainer}>
+      <ChartSong />
+      <ChartSong />
+      <ChartSong />
+      <ChartSong />
+      <ChartSong />
+      <ChartSong />
+      <ChartSong />
+      <ChartSong />
+      <ChartSong />
+      <ChartSong />
+      <ChartSong />
+      <ChartSong />
+      <ChartSong />
+      <ChartSong />
+      <ChartSong />
+      <ChartSong />
+      <ChartSong />
+      <ChartSong />
+      <ChartSong />
+      <ChartSong />
+      <ChartSong />
+      <ChartSong />
+      <ChartSong />
+      <ChartSong />
+      <ChartSong />
+      <ChartSong />
+      <ChartSong />
+      <ChartSong />
+      <ChartSong />
+      <ChartSong />
+      <ChartSong />
+      <ChartSong />
+      <ChartSong />
+      <ChartSong />
+      <ChartSong />
+      <ChartSong />
+      <ChartSong />
+      <ChartSong />
+      <ChartSong />
+      <ChartSong />
+      <ChartSong />
+      <ChartSong />
+      <ChartSong />
+      <ChartSong />
+      <ChartSong />
+      <ChartSong />
+    </ul>
+  );
 }
 
-export default function MusicVideo({
+function MusicVideo({
   musicVideoLink = "google.com",
   songname = "Fire and Desire",
   artist = "Drake",
@@ -74,6 +123,7 @@ export default function MusicVideo({
                 alt={`Song cover of ${songname} by ${artist} `}
                 aria-hidden="true"
                 className={Styles.songImg}
+                loading="lazy"
               />
               <div className={Styles.playContainer}>
                 <Play className={Styles.play} aria-hidden="true" />
@@ -104,5 +154,16 @@ export default function MusicVideo({
         </div>
       </div>
     </div>
+  );
+}
+
+export default function Chart() {
+  return (
+    <section className={Styles.chartContainer}>
+      <div className={Styles.chartWrapper}>
+        <ChartSongContainer />
+        <MusicVideo />
+      </div>
+    </section>
   );
 }
