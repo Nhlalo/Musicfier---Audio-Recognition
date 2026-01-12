@@ -86,57 +86,23 @@ function ArtistConcert({
 export default function Concerts() {
   //This will aid in the tracking of the visibility of the concert filter side bar
   const [filterVisibility, setFilterVisibility] = useState(false);
-
   const [switchContainerVisibility, setSwitchContainerVisibility] =
     useState(false);
-  const [mapVisibility, setMapVisibility] = useState(false);
-  const [concertInforVisibility, setConcertInforVisibility] = useState(true);
+  const [visibility, setVisibility] = useState({
+    mapVisibility: false,
+    concertVisibility: true,
+  });
 
+  const [viewportWidthStatus, setViewportWidthStatus] = useState(true);
   const [windowSize, setWindowSize] = useState({
     width: window.innerWidth,
     height: window.innerHeight,
   });
-
   const sidebarRef = useRef(null);
   const previousFocusedElement = useRef(null);
 
   useBodyScrollLock(filterVisibility);
 
-  useEffect(() => {
-    // Debounced resize handler
-    const widthSize = windowSize.width;
-    const handleResize = debounce(() => {
-      setWindowSize({
-        width: window.innerWidth,
-        height: window.innerHeight,
-      });
-      /* display the filter at a viewport less than 1024px(laptop) and expands the view port than decreases the viewport the viewport should be clear & clean thus making the filter disappear */
-      if (widthSize >= 1024) {
-        setFilterVisibility(false);
-        setSwitchContainerVisibility(false);
-      }
-    }, 250);
-
-    window.addEventListener("resize", handleResize);
-
-    // Initial size
-    setWindowSize({
-      width: window.innerWidth,
-      height: window.innerHeight,
-    });
-
-    return () => {
-      window.removeEventListener("resize", handleResize);
-    };
-  }, [windowSize.width]);
-
-  //Will display the concert filter side bar when the filter button is pressed
-  function handleShowFilter() {
-    setFilterVisibility(true);
-
-    //Trap Focus
-    previousFocusedElement.current = document.activeElement;
-  }
   useEffect(() => {
     if (filterVisibility) {
       const sideBarvalue = sidebarRef.current;
@@ -148,13 +114,67 @@ export default function Concerts() {
     setFilterVisibility(showSidebar);
   }
 
+  useEffect(() => {
+    // Debounced resize handler
+    const widthSize = windowSize.width;
+    const handleResize = debounce(() => {
+      setWindowSize({
+        width: window.innerWidth,
+        height: window.innerHeight,
+      });
+
+      /* display the filter at a viewport less than 1024px(laptop) and expands the view port than decreases the viewport the viewport should be clear & clean thus making the filter disappear */
+    }, 250);
+    if (widthSize >= 1024) {
+      setFilterVisibility(false);
+      setSwitchContainerVisibility(false);
+      setViewportWidthStatus(true);
+    }
+    if (widthSize < 1024) {
+      setViewportWidthStatus(false);
+    }
+
+    window.addEventListener("resize", handleResize);
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, [windowSize.width]);
+
+  //Change concert layout based on viewport width, if it is greater than 1024 then button viewing is activated
+  useEffect(() => {
+    if (viewportWidthStatus) {
+      setVisibility({
+        mapVisibility: true,
+        concertVisibility: true,
+      });
+    } else {
+      setVisibility({
+        mapVisibility: false,
+        concertVisibility: true,
+      });
+    }
+  }, [viewportWidthStatus]);
+
+  //Will display the concert filter side bar when the filter button is pressed
+  function handleShowFilter() {
+    setFilterVisibility(true);
+
+    //Trap Focus
+    previousFocusedElement.current = document.activeElement;
+  }
+
   function handleToggle() {
-    setConcertInforVisibility(true);
-    setMapVisibility(false);
+    setVisibility({
+      mapVisibility: false,
+      concertVisibility: true,
+    });
   }
   function handleMap() {
-    setConcertInforVisibility(false);
-    setMapVisibility(true);
+    setVisibility({
+      mapVisibility: true,
+      concertVisibility: false,
+    });
   }
 
   return (
@@ -187,47 +207,52 @@ export default function Concerts() {
             </button>
           </div>
           {/* Concerts by the searched artists will dynamically appear here */}
-          <div className={Styles.artistConcertContainer}>
-            <ArtistConcert />
-            <ArtistConcert />
-            <ArtistConcert />
-            <ArtistConcert />
-            <ArtistConcert />
-            <ArtistConcert />
-            <ArtistConcert />
-            <ArtistConcert />
-            <ArtistConcert />
-            <ArtistConcert />
-            <ArtistConcert />
-            <ArtistConcert />
-            <ArtistConcert />
-            <ArtistConcert />
-            <ArtistConcert />
-            <ArtistConcert />
-            <ArtistConcert />
-            <ArtistConcert />
-          </div>
-        </div>
-        <div className={Styles.mapContainer}>
-          {/* This will make the side bar be visible when the filter button is pressed */}
-          {filterVisibility && (
-            <FilterSidebarHeader
-              ref={sidebarRef}
-              showSidebar={passDataToChild}
-              sideBarVisible={filterVisibility}
-            />
+          {visibility.concertVisibility && (
+            <div className={Styles.artistConcertContainer}>
+              <ArtistConcert />
+              <ArtistConcert />
+              <ArtistConcert />
+              <ArtistConcert />
+              <ArtistConcert />
+              <ArtistConcert />
+              <ArtistConcert />
+              <ArtistConcert />
+              <ArtistConcert />
+              <ArtistConcert />
+              <ArtistConcert />
+              <ArtistConcert />
+              <ArtistConcert />
+              <ArtistConcert />
+              <ArtistConcert />
+              <ArtistConcert />
+              <ArtistConcert />
+              <ArtistConcert />
+            </div>
           )}
-          {/* This will automatically display the concert filter side bar when the viewport width is greater or equal to 1024px */}
-          {windowSize.width >= 1024 && <SidebarVisibility />}
-          <img src={artistImg} alt="artist Img" className={Styles.logoImg} />
         </div>
+        {/* This will make the side bar be visible when the filter button is pressed */}
+
+        {filterVisibility && (
+          <FilterSidebarHeader
+            ref={sidebarRef}
+            showSidebar={passDataToChild}
+            sideBarVisible={filterVisibility}
+          />
+        )}
+        {visibility.mapVisibility && (
+          <div className={Styles.mapContainer}>
+            {/* This will automatically display the concert filter side bar when the viewport width is greater or equal to 1024px */}
+            {windowSize.width >= 1024 && <SidebarVisibility />}
+            <img src={artistImg} alt="artist Img" className={Styles.logoImg} />
+          </div>
+        )}
         {windowSize.width < 1024 && (
           <div className={Styles.switchBTNsContainer}>
             <button
               type="button"
-              aria-label="View the map for the concerts location"
+              aria-label="View the list of concerts"
               className={
-                concertInforVisibility
+                visibility.concertVisibility
                   ? `${Styles.switchBTN} ${Styles.blueBG}`
                   : `${Styles.switchBTN}`
               }
@@ -236,7 +261,7 @@ export default function Concerts() {
               <ListCollapse
                 aria-hidden="true"
                 className={
-                  concertInforVisibility
+                  visibility.concertVisibility
                     ? `${Styles.toggleIcon} ${Styles.colorWhite}`
                     : `${Styles.toggleIcon}`
                 }
@@ -244,9 +269,9 @@ export default function Concerts() {
             </button>
             <button
               type="button"
-              aria-label="View the list of concerts"
+              aria-label="View the map for the concerts location"
               className={
-                mapVisibility
+                visibility.mapVisibility
                   ? `${Styles.switchBTN} ${Styles.blueBG}`
                   : `${Styles.switchBTN}`
               }
@@ -255,7 +280,7 @@ export default function Concerts() {
               <Map
                 aria-hidden="true"
                 className={
-                  mapVisibility
+                  visibility.mapVisibility
                     ? `${Styles.mapIcon} ${Styles.colorWhite}`
                     : `${Styles.mapIcon}`
                 }
