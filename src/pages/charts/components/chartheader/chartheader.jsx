@@ -6,6 +6,7 @@ import { forwardRef, useEffect, useState, useRef } from "react";
 import Select from "react-select";
 import getAllCountries from "../../../../utilis/countryname/countryname";
 import Header from "../../../../components/layout/header/header";
+import Chart from "../chartlist/chartsong";
 //Generate keys for the chart buttons
 const chartTypeKeys = [
   crypto.randomUUID(),
@@ -104,11 +105,8 @@ export default function ChartHeader() {
     <>
       <Header
         bg1={headerBG}
-        bg2={headerBG}
         color1="#fff"
-        color2="#fff"
         logoBG1=" rgba(255, 255, 255, 0.3)"
-        logoBG2=" rgba(255, 255, 255, 0.3)"
       />
       <section className={sectionBG}>
         <div className={Styles.chartHeaderWrapper}>
@@ -182,6 +180,7 @@ export default function ChartHeader() {
           </div>
         </div>
       </section>
+      <Chart BG={headerBG} />
     </>
   );
 }
