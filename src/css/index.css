@@ -17,7 +17,7 @@ li {
 }
 button {
   border: none;
-  background-color: none;
+  background-color: transparent;
   cursor: pointer;
 }
 p {
