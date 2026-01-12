@@ -7,7 +7,7 @@
   --aboutContainer-top-padding: 3.75rem;
 }
 .aboutContainer {
-  width: 100vw;
+  width: 100%;
   justify-content: center;
   background: var(--about-bg);
   padding-top: var(--aboutContainer-top-padding);
