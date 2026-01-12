@@ -34,6 +34,7 @@ function Song({ index }) {
               alt="Drake"
               aria-hidden="true"
               className={Styles.artistImg}
+              loading="lazy"
             />
             <div className={Styles.playIconContainer}>
               <Play aria-hidden="true" className={Styles.songPlayIcon} />

@@ -16,6 +16,7 @@ function MoreCharts({ location = "South Africa" }) {
             src={artistImg}
             alt="featured song cover"
             className={Styles.featuredSongCover}
+            loading="lazy"
           />
         </div>
         <div className={Styles.featuredSongCoverWrapper}>
@@ -23,6 +24,7 @@ function MoreCharts({ location = "South Africa" }) {
             src={artistImg}
             alt="featured song cover"
             className={Styles.featuredSongCover}
+            loading="lazy"
           />
         </div>
         <div className={Styles.featuredSongCoverWrapper}>
@@ -30,6 +32,7 @@ function MoreCharts({ location = "South Africa" }) {
             src={artistImg}
             alt="featured song cover"
             className={Styles.featuredSongCover}
+            loading="lazy"
           />
         </div>
       </div>
