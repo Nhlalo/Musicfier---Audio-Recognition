@@ -7,7 +7,6 @@ import debounce from "../../../../utilis/debounce/debounce";
 import { Sidebarby } from "../sidebar/sidebar";
 import getFocusableElements from "../../../../utilis/focusableElements/focusableelements";
 import { displayModal } from "../../../../utilis/side bar/sidebar";
-import Header from "../../../../components/layout/header/header";
 
 //Custom hook that will make the body not be scrollable if the side bar is open
 function useBodyScrollLock(isButtonPressed) {
@@ -160,15 +159,6 @@ export default function Concerts() {
 
   return (
     <>
-      <Header
-        bg1="#fff"
-        color1="#000"
-        logoBG1="#000"
-        logoBG2="#000"
-        color2="#000"
-        btnBG1="#000"
-        btnBG2="#000"
-      />
       <section className={Styles.allConcertsContainer}>
         <div className={Styles.allConcertsWrapper}>
           <h1 className={Styles.concertCountry}>
