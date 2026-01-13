@@ -1,3 +1,7 @@
+:root {
+  --errorHeader-font-size: 0.875rem;
+  --errorDescr-font-size: 0.75rem;
+}
 .errorfeedback {
   color: #000;
   background-color: #fff;
@@ -6,6 +10,8 @@
   min-width: 100px;
   border-radius: 0.9375rem;
   position: absolute;
+  left: 0;
+  top: 0;
 }
 .errorfeedbackWrapper {
   position: relative;
@@ -14,11 +20,17 @@
 .errorfeedback,
 .errorDescr {
   font-weight: 700;
+  text-align: left;
 }
 .errorHeader {
-  font-size: 1.125rem;
+  font-size: var(--errorHeader-font-size);
   font-weight: 700;
   margin-bottom: 0.3125rem;
+}
+.errorDescr {
+  font-size: var(--errorDescr-font-size);
+  color: #3a3a3c;
+  letter-spacing: 0.5px;
 }
 .closeBTN {
   position: absolute;
@@ -29,4 +41,11 @@
   width: 20px;
   height: 20px;
   color: #3a3a3c;
+}
+
+@media (min-width: 768px) {
+  :root {
+    --errorHeader-font-size: 1.125rem;
+    --errorDescr-font-size: 16px;
+  }
 }
