@@ -1,0 +1,32 @@
+.errorfeedback {
+  color: #000;
+  background-color: #fff;
+  width: max-content;
+  max-width: 245px;
+  min-width: 100px;
+  border-radius: 0.9375rem;
+  position: absolute;
+}
+.errorfeedbackWrapper {
+  position: relative;
+  padding: 1.25rem;
+}
+.errorfeedback,
+.errorDescr {
+  font-weight: 700;
+}
+.errorHeader {
+  font-size: 1.125rem;
+  font-weight: 700;
+  margin-bottom: 0.3125rem;
+}
+.closeBTN {
+  position: absolute;
+  right: 0.125rem;
+  top: 0.0625rem;
+}
+.xIcon {
+  width: 20px;
+  height: 20px;
+  color: #3a3a3c;
+}
