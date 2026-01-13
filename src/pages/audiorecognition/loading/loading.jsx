@@ -40,19 +40,20 @@ export default function LoadingPage() {
             />
           </button>
 
-          <div className={Styles.loadingMessage}>
+          <div className={`${Styles.loadingMessage} ${Styles.listening}`}>
             <AudioLines className={Styles.icon} aria-hidden="true" />
             <p className={Styles.loadingMessageHeader}>Listening for music</p>
             <p className={Styles.loadingMessageDescr}>
               Make sure your device can hear the song clearly
             </p>
           </div>
-          <div className={`${Styles.loadingMessage} ${Styles.hideItem}`}>
+          <div className={`${Styles.loadingMessage} ${Styles.wait}`}>
             <Ellipsis className={Styles.icon} aria-hidden="true" />
             <p className={Styles.loadingMessageHeader}>Searching</p>
             <p className={Styles.loadingMessageDescr}>Please wait</p>
           </div>
-          <div className={`${Styles.loadingMessage} ${Styles.hideItem}`}>
+          <div className={`${Styles.loadingMessage} ${Styles.lastTry}`}>
+            <Ellipsis className={Styles.icon} aria-hidden="true" />
             <p className={Styles.loadingMessageHeader}>This is tough</p>
             <p className={Styles.loadingMessageDescr}>Last try</p>
           </div>
