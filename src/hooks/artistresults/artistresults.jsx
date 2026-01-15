@@ -3,6 +3,21 @@ import artistImg from "../../assets/artistImg.jpg";
 import { useState } from "react";
 import { Search, LoaderCircle } from "lucide-react";
 
+function Error() {
+  return (
+    <div className={Styles.errorContainer}>
+      <div aria-hidden="true" className={Styles.searchIconContainer}>
+        <Search className={Styles.searchIcon} />
+      </div>
+      <p className={Styles.noResults}>We couldn't find any results matching</p>
+      <p className={Styles.suggestion}>
+        Please make sure your words are spelled correctly, or try using
+        different keywords
+      </p>
+    </div>
+  );
+}
+
 function Artists({ imagesrc, name = "Drake" }) {
   return (
     <button
