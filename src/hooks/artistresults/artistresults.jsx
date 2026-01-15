@@ -3,6 +3,15 @@ import artistImg from "../../assets/artistImg.jpg";
 import { useState } from "react";
 import { Search, LoaderCircle } from "lucide-react";
 
+function Loading() {
+  return (
+    <div className={Styles.loadingContainer}>
+      <div className={Styles.visuallyHidden}>waiting for the data to load</div>
+      <LoaderCircle aria-hidden="true" className={Styles.loaderCircleIcon} />
+    </div>
+  );
+}
+
 function Error() {
   return (
     <div className={Styles.errorContainer}>
